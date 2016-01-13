@@ -84,6 +84,7 @@ FactoryGirl.define do
     status "waiting"
     completion Time.current
     earliest_start Time.current
+		num_rounds 1
 
     factory :tournament_match do
       association :manager, factory: :tournament
@@ -132,6 +133,11 @@ FactoryGirl.define do
 
       after(:create) do |match, evaluator|
         num_players = match.manager.referee.players_per_game
+
+       	if evaluator.player
+	  num_players -= 1
+	  create(:player_match, player: evaluator.player, match: match)
+	end
 
         num_players.times do
 	  player = create(:player, contest: match.manager.contest)
