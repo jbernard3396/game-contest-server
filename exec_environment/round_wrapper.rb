@@ -48,12 +48,9 @@ class RoundWrapper
     
     #Used if referee is not rounds capable and can't calculate it's own match results
     def calculate_results
-        players = {}
+        players = Hash.new(0)
         @rounds.each do |round|
             round[:results].each do |player,result|
-                if not players.has_key?(player)
-                    players[player] = 0
-                end
                 if result[:result] == "Win"
                     players[player] += 1
                 end
@@ -104,8 +101,7 @@ class RoundWrapper
 		    command="#{@referee.file_location} -p #{wrapper_server_port} -n  #{@number_of_players} -r #{@num_rounds}"
 	    end
         #Change directories
-        Process.spawn("cd #{File.dirname(@referee.file_location)};")
-        @child_list.push(Process.spawn("#{command}"))
+        @child_list.push(Process.spawn("cd #{File.dirname(@referee.file_location)}; #{command}"))
 
         #Wait for referee to tell wrapper_server what port to start players on
         begin
@@ -133,8 +129,7 @@ class RoundWrapper
 			else
 			    command="#{player.file_location} -n '#{name}' -p #{@client_port}"
 			end
-            Process.spawn("cd #{File.dirname(player.file_location)};")
-            @child_list.push(Process.spawn("#{command}"))
+            @child_list.push(Process.spawn("cd #{File.dirname(player.file_location)}; #{command}"))
         end
         
         begin

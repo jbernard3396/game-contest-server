@@ -103,7 +103,7 @@ class MatchRunner
     end
 
     def save_rounds(rounds)
-        if rounds.length != @num_rounds
+        if rounds.length != @num_rounds && @referee.rounds_capable?
             return false
         end
         #Loop through all the rounds and create a new record in the DB
