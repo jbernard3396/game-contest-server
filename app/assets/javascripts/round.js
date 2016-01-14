@@ -225,15 +225,22 @@
 
         self.elements = {};
 
-        self.elements["controls"] = document.createElement("div");
         self.elements["renderer"] = document.createElement("div");
+        self.elements["renderer"].classList.add("col-md-8");
+
         self.elements["moves-viewer"] = document.createElement("ol");
+        self.elements["moves-viewer"].classList.add("col-md-4");
 
         //Add elements to viewer
         for (var key in self.elements) {
             self.elements[key].classList.add(key);
             self.element.appendChild(self.elements[key]);
         }
+
+
+        self.elements["controls"] = document.createElement("div");
+        self.elements["controls"].classList.add("controls");
+        self.elements["renderer"].appendChild(self.elements["controls"]);
     }
 
     /*
@@ -253,7 +260,7 @@
         self.playbackSlider.setAttribute("type", "range");
         self.playbackSlider.setAttribute("step", 1);
         self.playbackSlider.setAttribute("min", 0);
-        self.playbackSlider.setAttribute("max", self.round.moves.length - 1);
+        self.playbackSlider.setAttribute("max", self.round.moves.length);
         self.playbackSlider.setAttribute("value", 0);
 
         //Change current move based upon slider location
@@ -278,6 +285,9 @@
 
         var movesViewer = self.elements["moves-viewer"];
 
+        //Match height to height of renderer
+        movesViewer.style.height = self.elements["renderer"].offsetHeight + "px";
+
         self.elements["moves-controls"] = [];
 
         var move, view;
@@ -301,6 +311,35 @@
     }
 
     /*
+     * updateNavigation()
+     * Changes the currently highlighted move
+     */
+    Replay.prototype.updateNavigation = function() {
+        var self = this;
+
+        var movesViewer = self.elements["moves-viewer"];
+
+        if (self.lastMoveLoaded > 0) {
+            movesViewer.children[self.lastMoveLoaded - 1].classList.remove("current");
+        }
+
+        var inRange = function(number, min, max) {
+            return number > min && number < max;
+        }
+
+        //Add current class to move
+        if (self.moveNumber > 0) {
+            var move = movesViewer.children[self.moveNumber - 1]
+            move.classList.add("current");
+
+            //Check if element is visible in list
+            if (!inRange(move.offsetTop + move.offsetHeight, movesViewer.scrollTop, movesViewer.scrollTop + movesViewer.offsetHeight)) {
+                movesViewer.scrollTop = move.offsetTop - movesViewer.offsetHeight + move.offsetHeight;
+            }
+        }
+    }
+
+    /*
      * loadMove()
      * Display a move in the renderer
      */
@@ -315,6 +354,9 @@
 
         //Wrap invalid move index
         self.moveNumber = (self.moveNumber > self.round.moves.length || self.moveNumber < 0) ? 0 : self.moveNumber;
+
+        //Update the move navigation
+        self.updateNavigation();
 
         //Keep track of the last move loaded
         self.lastMoveLoaded = self.moveNumber;
