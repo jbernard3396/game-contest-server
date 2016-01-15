@@ -3,14 +3,14 @@ class MatchesController < ApplicationController
   before_action :ensure_contest_creator, only: [:edit, :update, :destroy]
 
  def new
-   contest = Contest.friendly.find(params[:contest_id])
-   @contest = Contest.friendly.find(params[:contest_id])
-   @match = contest.matches.build
-   @match.manager.players.each do |f|
-	@match.player_matches.build(player: f )
+   if params[:match] && params[:match][:contest_id]
+	   @contest = Contest.find(params[:match][:contest_id])
+	   @match = @contest.matches.build
+	   @match.manager.players.each do |f|
+		@match.player_matches.build(player: f )
+           end
    end
    #@match.earliest_start = Time.now
-  
   end 
 
 
