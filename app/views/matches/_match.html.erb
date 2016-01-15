@@ -1,1 +1,7 @@
-<li><%= link_to "Match #{match.id}", match %></li>
+<li><%= if match.manager_type.to_s == "Tournament"
+					link_to  (match.match_name + " (" + match.name + ")"), match
+				else
+					link_to match.name + " completed " + match.completion.strftime("%B %d, %Y at %H:%M"), match
+				end
+		%>	
+</li>

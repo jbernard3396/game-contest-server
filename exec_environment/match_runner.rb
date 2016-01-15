@@ -45,6 +45,7 @@ class MatchRunner
        @max_match_time = @referee.time_per_game
        @tournament = @match.manager
        @num_rounds = @match.num_rounds
+			 @match_name = "match duh" 
 
        @logs_directory = Rails.root.join("public", "match-logs")
     end 
