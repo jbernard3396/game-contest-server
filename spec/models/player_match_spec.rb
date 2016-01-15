@@ -1,6 +1,7 @@
 require 'rails_helper'
 
 describe PlayerMatch do
+	let! (:match) { FactoryGirl.create(:challenge_match) }
   let (:player_match) { FactoryGirl.create(:player_match) }
   subject { player_match }
 
@@ -16,13 +17,30 @@ describe PlayerMatch do
     specify { expect_required_attribute(:player) }
     specify { expect_required_attribute(:match) }
   end
-	describe "has same player and match as a different player match" do
-		let (:player_match2) { FactoryGirl.create(:player_match, player_id: 1, match_id: 1) }
-		before do
-			player_match.match_id = 1
-			player_match.player_id = 1
+=begin
+<<<<<<< HEAD
+=end
+
+	describe "result is (case-sensitive)" do
+		let (:list) { [nil, 'Win', 'Loss', 'Tie', 'Unknown Result'] }
+		it "in the list [nil, 'Win', 'Loss', 'Tie', 'Unknown Result']" do
+			list.each do |list_item|
+				player_match.result = list_item
+    		should be_valid 
+			end
 		end
-		subject { player_match2 }
+
+		it "not in the list [nil, 'Win', 'Loss', 'Tie', 'Unknown Result']" do
+			player_match.result = 'garbage'
+    	should_not be_valid
+		end
+	end
+
+	describe "has same player and match as a different player match" do	
+		before do
+			player_match.match_id = match.player_matches.first.match_id
+			player_match.player_id = match.player_matches.first.player_id
+		end
 
 		it { should_not be_valid }
 	end

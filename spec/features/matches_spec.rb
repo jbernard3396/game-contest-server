@@ -247,9 +247,29 @@ describe "MatchesPages" do
         expect { delete match_path(challenge_match) }.to change(Match, :count).by(-1)
       end
 
+			it "removes all rounds associated with the match from the system (challenge round)" do
+				expect { delete match_path(challenge_match) }.to change(Round, :count).by(-4)
+			end
+
       it "removes a match from the system (tournament match)" do
         expect { delete match_path(tournament_match) }.to change(Match, :count).by(-1)
       end
+			
+			it "removes all player matches associated with the match from the system" do
+				expect { delete match_path(tournament_match) }.to change(PlayerMatch, :count).by(-4)
+			end
+
+			it "removes all rounds associated with the match from the system (tournament round)" do
+				expect { delete match_path(tournament_match) }.to change(Round, :count).by(-4)
+			end
+
+			it "removes all player rounds associated with the match from the system" do
+				expect { delete match_path(tournament_match) }.to change(PlayerRound, :count).by(-16)
+			end
+			
+			xit "removes match path associated with the match" do
+				expect { delete match_path(tournament_match) }.to change(MatchPath, :count).by(-1)
+			end
 
     end # logged in as contest creator
 
@@ -291,7 +311,7 @@ describe "MatchesPages" do
         visit match_path(match)
       end
 
-      xit "should link to all players" do
+     xit "should link to all players" do
         match.players.each_with_index do |p, i|
           selector = "//ol/li[position()=#{i + 1}]"
           should have_selector(:xpath, selector, text: p.name)
@@ -311,7 +331,7 @@ describe "MatchesPages" do
         visit match_path(match)
       end
 
-      xit "should link to all players" do
+     xit "should link to all players" do
         match.players.each_with_index do |p, i|
           selector = "//ol/li[position()=#{match.players.size - i}]"
           should have_selector(:xpath, selector, text: p.name)
@@ -369,6 +389,7 @@ describe "MatchesPages" do
 
 # SHOW ALL CONTEST MATCHES
   describe "show all contest matches" do
+=begin
     let (:contest) { FactoryGirl.create(:contest) }
     let (:user) { FactoryGirl.create(:user) }
     let (:player) { FactoryGirl.create(:player, user: user, contest: contest) }
@@ -383,22 +404,30 @@ describe "MatchesPages" do
         should have_selector('li', text: m.id)
         should have_link(m.id, match_path(m))
       end
-    end
-=begin
-    let (:contest) { FactoryGirl.create(:contest) }
-		let (:challenge_match) { FactoryGirl.create(:challenge_match, manager: contest) }
-		let (:logged_in_user) do
-			@player = challenge_match.players.first
 		end
+=end
+		# 'let!' is necessary because, without it, the Match's index page is visited before the challenge matches are created
+		let! (:challenge_matches_player1_is_in) { FactoryGirl.create_list(:challenge_match, 5, manager: contest, player: player1) }
+    let! (:challenge_matches_player1_is_not_in) { FactoryGirl.create_list(:challenge_match, 5, manager: contest, player: player2) }
     before do
-      5.times { FactoryGirl.create(:challenge_match, manager: contest) }
-      login user
+      login creator
       visit contest_matches_path(contest)
     end
 
-		it "lists all challenge matches for a contest, in which the user has a player participating" do
+    it "should list all the challenge matches for a contest in which the user has a player participating" do
+      challenge_matches_player1_is_in.each do |m|
+        should have_selector('li', text: m.id)
+        should have_link(m.id, match_path(m))
+      end
+    end
+
+		it "should not list challenge matches (within the same contest) in which the user doesn\'t have a player participating" do
+      challenge_matches_player1_is_not_in.each do |m|
+        should_not have_selector('li', text: m.id)
+        should_not have_link(m.id, match_path(m))
+      end
+
 		end
-=end
   end
 
 end

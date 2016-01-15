@@ -26,24 +26,29 @@ FactoryGirl.define do
       location = Rails.root.join('code',
                                  'referees',
                                  'test',
-                                 "FactoryGirl-fake-code-#{i}").to_s
-      FileUtils.touch(location)
-      location
+                                 SecureRandom.hex)
+      FileUtils.mkdir_p(location.to_s)
+      finalLocation = location.join("FactoryGirl-fake-code-#{i}").to_s
+      FileUtils.touch(finalLocation)
+      finalLocation
     end
     sequence(:compressed_file_location) do |i|
       location = Rails.root.join('code',
                                  'environments',
                                  'test',
-                                 "FactoryGirl-fake-code-#{i}").to_s
-      FileUtils.touch(location)
-      location
+                                 SecureRandom.hex)
+      FileUtils.mkdir_p(location.to_s)
+      finalLocation = location.join("FactoryGirl-fake-code-#{i}").to_s
+      FileUtils.touch(finalLocation)
+      finalLocation
     end
     sequence(:name) { |i| "Referee #{i}" }
     rules_url "http://example.com/path/to/rules"
     players_per_game 4
     time_per_game 10
     user
-    match_limit 150
+    round_limit 150
+		rounds_capable false 
   end
 
   factory :contest do
@@ -84,7 +89,7 @@ FactoryGirl.define do
     status "waiting"
     completion Time.current
     earliest_start Time.current
-		num_rounds 1
+		num_rounds 4
 
     factory :tournament_match do
       association :manager, factory: :tournament
@@ -124,6 +129,10 @@ FactoryGirl.define do
 	  create(:player_tournament, player: player, tournament: match.manager)
 	end
 
+	match.num_rounds.times do
+		round = create(:round, match: match)
+	end
+
 	match.save!
       end
     end
@@ -143,6 +152,10 @@ FactoryGirl.define do
 	  player = create(:player, contest: match.manager.contest)
 	  create(:player_match, player: player, match: match)
         end
+
+		match.num_rounds.times do
+			round = create(:round, match: match)
+		end
 
         match.save!
       end
@@ -173,9 +186,11 @@ FactoryGirl.define do
       location = Rails.root.join('code',
                                  'players',
                                  'test',
-                                 "FactoryGirl-fake-code-#{i}").to_s
-      FileUtils.touch(location)
-      location
+                                 SecureRandom.hex)
+      FileUtils.mkdir_p(location.to_s)
+      finalLocation = location.join("FactoryGirl-fake-code-#{i}").to_s
+      FileUtils.touch(finalLocation)
+      finalLocation
     end
     description "Player Description Here"
     sequence(:name) { |i| "Player #{i}" }
@@ -190,7 +205,7 @@ FactoryGirl.define do
   factory :player_round do 
     player
     association :round, factory: :challenge_round 
-    result "Unknown Round Result" 
+    result nil 
     score 1.0
   end
 
