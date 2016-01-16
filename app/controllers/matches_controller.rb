@@ -50,6 +50,7 @@ class MatchesController < ApplicationController
     if params[:tournament_id]
 			@is_challenge_matches = false
       @manager = Tournament.friendly.find(params[:tournament_id])
+			@manager
     elsif params[:contest_id]
 			@is_challenge_matches = true
       @manager = Contest.friendly.find(params[:contest_id])
@@ -70,7 +71,7 @@ class MatchesController < ApplicationController
 
 			# the following code is relevant if ensure_correct_user_from_list does not redirect to root or a login
 			# find all the contest's challenge matches in which the user has a player participating in
-			@matches = Match.joins(:players).where(players: {user: current_user , contest:@manager })
+			@matches = Match.joins(:players).where(players: {user: current_user , contest:@manager }).uniq
 			return 
 =begin
 			# store in an array all the user's players in the contest 

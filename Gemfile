@@ -16,6 +16,7 @@ group :test do
 end
 
 gem 'redcarpet', '~> 3.3', '>= 3.3.4'
+gem 'pygmentize'
 
 group :development, :test do
   gem 'rspec-rails', '~> 3.1.0'
@@ -46,6 +47,9 @@ gem 'sass-rails', '~> 4.0.3'
 gem 'bootstrap-sass', '~> 3.3.1'
 #gem 'bootstrap-sass', github: 'thomas-mcdonald/bootstrap-sass'
 
+#Font awesome
+gem "font-awesome-rails"
+
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 1.3.0'
 
@@ -57,9 +61,6 @@ gem 'coffee-rails', '~> 4.0.0'
 
 #Use jquery
 gem 'jquery-rails'
-
-#Use angular js
-gem 'angularjs-rails'
 
 # Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
 gem 'turbolinks'

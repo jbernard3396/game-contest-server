@@ -3,11 +3,13 @@ class Round < ActiveRecord::Base
 
   
   has_many :player_rounds, dependent: :destroy
-  has_many :players, through: :player_rounds
+  has_many :players,  through: :player_rounds
+	
+	#validates :players, presence: true
   
   validates :match, presence: true
 
-	validate	:check_num_rounds
+	validate	:check_num_rounds, on: :create
 
   def name
     return SecureRandom.hex(5)
@@ -31,6 +33,7 @@ class Round < ActiveRecord::Base
 	validate :same_players_as_match 
 
 	def same_players_as_match
+		#if match.present? && match.players != players # this line will accomplish what the line below accomplishes, and also accomplishes the 'validates :players....' line above
 		if match.present? && players.present? && match.players != players
 			errors.add(:players, "must be the same as the match's players")
 		end

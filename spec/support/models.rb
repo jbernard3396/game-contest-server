@@ -4,3 +4,10 @@ def expect_required_attribute(attribute)
 
   should_not be_valid
 end
+
+
+def puts_players(players)
+	players.each do |p|
+		puts p.name
+	end
+end
