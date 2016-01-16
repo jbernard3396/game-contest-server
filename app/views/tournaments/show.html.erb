@@ -41,7 +41,7 @@
 			%>
 			<tr>
 				<td>?</td><!-- e.g. '1st' (as in '1st place') -->
-				<td><%=player.name%></td>
+				<td><%=link_to player.name, player%></td>
 				<td><%=@win_count%></td>
 				<td><%=@loss_count%></td>
 			</tr>
