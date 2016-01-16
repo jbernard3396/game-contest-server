@@ -137,9 +137,9 @@ describe "AuthorizationPages" do
       describe "new action" do
         it_behaves_like "redirects to a login" do
           let (:contest) { FactoryGirl.create(:contest) }
-          let (:path) { new_contest_player_path(contest) }
+          let (:path) { new_player_path }
           let (:method) { :post }
-          let (:http_path) { contest_players_path(contest) }
+          let (:http_path) { players_path }
         end
       end
 

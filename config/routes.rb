@@ -18,14 +18,14 @@ GameContestServer::Application.routes.draw do
 
   resources :contests, shallow: true do
     resources :matches, except: [:edit, :update]
-    resources :players
     resources :tournaments, shallow: true do
-      resources :players
       resources :matches, only: [:index] do
 	resources :rounds, only: [:show]
       end
     end
   end
+
+  resources :players
 
 
 

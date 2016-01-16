@@ -90,8 +90,8 @@ describe "ContestsPages" do
         it { should have_content(description) }
         it { should have_content(name) }
         it { should have_content(contest.referee.name) }
-        it { should have_link('New Player',
-          href: new_contest_player_path(contest)) }
+        xit { should have_link('New Player',
+          href: new_player_path) }
       end
     end
   end
@@ -152,8 +152,8 @@ describe "ContestsPages" do
         specify { expect(contest.reload.name).to eq(name) }
         specify { expect(contest.reload.description).to eq(description) }
         specify { expect(contest.reload.referee.name).to eq(referee.name) }
-        it { should have_link('New Player',
-          href: new_contest_player_path(contest)) }
+        xit { should have_link('New Player',
+          href: new_player_path) }
       end
 
       describe "redirects properly", type: :request do
@@ -324,8 +324,8 @@ describe "ContestsPages" do
       end
     end
 
-    it { should have_link('New Player',
-      href: new_contest_player_path(contest)) }
+    xit { should have_link('New Player',
+      href: new_player_path) }
 
     it { should have_link('Challenge other players.',
       href: new_contest_match_path(contest)) }
