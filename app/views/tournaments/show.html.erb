@@ -18,9 +18,38 @@
 <p>Contest owner: <%= link_to @tournament.contest.user.username, @tournament.contest.user %></p>
 <p>Referee: <%= link_to @tournament.referee.name, @tournament.referee %></p>
 <h2><%= pluralize(@tournament.players.count, 'Player') %></h2>
-<ul>
-    <%= render @tournament.players %>
-</ul>
+
+<div class="table table-responsive">
+	<table class="table">
+		<thead>
+			<tr>
+				<th>Place</th>
+				<th>Player</th>
+				<th>Wins</th>
+				<th>Losses</th>
+			</tr>
+		</thead>
+		<tbody>
+			<% @tournament.players.each do |player|
+					 @win_count = PlayerMatch.where(player: player,
+			   		 match: Match.where(manager: @tournament),
+			   		 result: "Win").count 
+
+ 						@loss_count = PlayerMatch.where(player: player,
+			   			 match: Match.where(manager: @tournament),
+			    		result: "Loss").count 
+			%>
+			<tr>
+				<td>?</td><!-- e.g. '1st' (as in '1st place') -->
+				<td><%=player.name%></td>
+				<td><%=@win_count%></td>
+				<td><%=@loss_count%></td>
+			</tr>
+			<% end %>
+		</tbody>
+	</table>
+</div>
+
 <h2><%= pluralize(@tournament.matches.count, 'Match')%></h2>
 <ul>
     <%= render @tournament.matches %> 

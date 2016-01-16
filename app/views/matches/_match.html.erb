@@ -1,5 +1,6 @@
 <li><%= if match.manager_type.to_s == "Tournament"
-					link_to  (match.match_name + " (" + match.name + ")"), match
+					#link_to  (match.match_name + " (" + match.name + ")"), match
+					link_to match.name, match # commented out the line above just for a temporary fix. Once this branch is merged with whatever branch is implementing the 'match_name' attribute, then this line will probably no longer be desired
 				else
 					link_to match.name + " completed " + match.completion.strftime("%B %d, %Y at %H:%M"), match
 				end
