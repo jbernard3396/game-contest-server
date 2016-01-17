@@ -11,6 +11,24 @@ describe "PlayersPages" do
 
   subject { page }
 
+	describe "new" do
+		let! (:expired_contest) { Contest.new(
+															user: FactoryGirl.create(:contest_creator),
+															referee: FactoryGirl.create(:referee),
+															deadline: DateTime.new(2000), #so the deadline has expired
+															description: "Contest Description Here",
+															name: "Expired Contest")   }
+    before do
+      login user
+			expired_contest.save(validate: false)
+      visit new_player_path
+    end
+
+		it "should not allow selecting expired contests" do
+    	should_not have_selector('option', text: expired_contest.name)
+		end
+	end
+
   describe "create" do
     let (:submit) { 'Create Player' }
 
@@ -31,6 +49,33 @@ describe "PlayersPages" do
           it { should have_alert(:danger) }
         end
       end
+			describe "all contests' deadlines have expired" do
+				before do
+        	fill_in 'Name', with: name
+        	fill_in 'Description', with: description
+					select contest.name, from: 'Contest'
+        	check('Allow others to compete against this player')
+        	uncheck('Allow others to download this player')
+        	attach_file('Upload file', file_location)
+
+					# to ensure that the selected contest has an expired deadline
+					contest.deadline = DateTime.new(2000) 	
+					contest.save(validate: false)
+				end
+        it "should not create a player" do
+          expect { click_button submit }.not_to change(Player, :count)
+        end
+
+        describe "after submission" do
+          before { click_button submit }
+
+          it { should have_alert(:danger) }
+        end
+				after do
+					contest.deadline = DateTime.new(2026)
+					contest.save
+				end
+			end
     end
 
     describe "valid information" do

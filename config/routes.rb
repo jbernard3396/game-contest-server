@@ -26,7 +26,7 @@ GameContestServer::Application.routes.draw do
     end
   end
 
-  resources :players
+  resources :players, except: [:index]
 
 
 

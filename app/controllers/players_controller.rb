@@ -16,10 +16,10 @@ class PlayersController < ApplicationController
   def new
     @player = Player.new
 		@contests = Contest.where('deadline > "' + DateTime.now.strftime('%Y-%m-%d %H:%M:%S') + '"')
-=begin
-    contest = Contest.friendly.find(params[:contest_id])
-    @player = contest.players.build
-=end
+		if @contests.count == 0
+			flash[:danger] = 'All contest deadlines are expired'
+			redirect_to root_path
+		end
   end
 
   def create 
@@ -30,7 +30,9 @@ class PlayersController < ApplicationController
       flash[:success] = 'New Player created.'
       redirect_to @player
     else
-      render 'new'
+      #render 'new'
+			flash[:danger] = "Player could not be created"
+			redirect_to new_player_path
     end
   end
 

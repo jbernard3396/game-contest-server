@@ -54,7 +54,7 @@ FactoryGirl.define do
   factory :contest do
     user
     referee
-    deadline DateTime.new(2026)
+		deadline DateTime.new(2026)
     description "Contest Description Here"
     sequence(:name) { |i| "Contest #{i}" }
   end

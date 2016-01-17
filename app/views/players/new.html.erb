@@ -6,7 +6,7 @@
         <%= render 'shared/error_messages', object: @player %>
 				<div class="form-group">
     				<%= f.label :contest_id, 'Contest' %>
-    				<%= f.select :contest_id, options_from_collection_for_select(@contests, :id, :name), class: 'form-control' %>
+    				<%= f.select :contest_id, options_from_collection_for_select(@contests, 'id', 'name'), class: 'form-control' %>
 				</div>
         <%= render 'fields', f: f %>
 

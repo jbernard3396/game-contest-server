@@ -350,6 +350,35 @@ describe "AuthorizationPages" do
 		end
 		
   end
+	
+	describe "authenticated, but the action is not authorized at this time" do
+		describe "for Players controller" do
+      let (:login_user) { user }
+      let (:signature) { 'New Player' }
+      let (:error_type) { :danger }
+			let! (:contest) { Contest.new(user: FactoryGirl.create(:contest_creator),
+																		referee: FactoryGirl.create(:referee),
+																		deadline: DateTime.new(2000), #so the deadline has expired
+																		description: "Contest Description Here",
+																		name: "Contest 1")   }
+			before { 
+				contest.save(validate: false) 
+				#puts Contest.where(name: "Contest 1").first.deadline #how to tell that the contest was saved
+			}
+			describe "new action, all contests have expired deadlines" do
+      	it_behaves_like "redirects to root", browser_only: true do
+     	  	let (:path) { new_player_path }
+				end
+			end
+=begin
+			describe "create action, selected contest's deadline has expired", skip_browser: true do
+       	let (:method) { :create }
+       	let (:http_path) { players_path }
+				# test not finished
+			end
+=end
+		end
+	end
 
   describe "authenticated, but non-admin user" do
     describe "for Users controller" do
