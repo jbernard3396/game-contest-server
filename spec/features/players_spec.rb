@@ -2,7 +2,7 @@ require 'rails_helper'
 
 describe "PlayersPages" do
   let (:user) { FactoryGirl.create(:user) }
-  let (:contest) { FactoryGirl.create(:contest) }
+  let! (:contest) { FactoryGirl.create(:contest) }
   let (:player) { FactoryGirl.create(:player, user: user, contest: contest) }
   let (:description) { 'Test Player Description' }
   let (:name) { 'Test Player' }
@@ -37,6 +37,7 @@ describe "PlayersPages" do
       before do
         fill_in 'Name', with: name
         fill_in 'Description', with: description
+				select contest.name, from: 'Contest'
         check('Allow others to compete against this player')
         uncheck('Allow others to download this player')
         attach_file('Upload file', file_location)
@@ -51,7 +52,7 @@ describe "PlayersPages" do
           login user, avoid_capybara: true
           post players_path,
             player: { name: name,
-							contest: contest,
+							contest_id: contest.id,
               description: description,
               downloadable: false,
               playable: true,
@@ -193,9 +194,7 @@ describe "PlayersPages" do
 
     describe "redirects properly" do
       before { delete player_path(player) }
-			pending("pending for sake of UploadPlayerUI (at some point, see what functionality on the site was represented by this test") {
-      specify { expect(response).to redirect_to(players_path(player.contest)) }
-			}
+      specify { expect(response).to redirect_to(contest_players_path(player.contest)) }
     end
 
     it "produces a delete message" do
@@ -295,15 +294,13 @@ describe "PlayersPages" do
     before do
       30.times { FactoryGirl.create(:player, contest: contest) }
 
-      visit players_path(contest)
+      visit contest_players_path(contest)
     end
-		pending("pending for sake of UploadPlayersUI, see later if the tested functionality is still desired"){
     it { should have_content('10 Players') }
     it { should have_selector('div.pagination') }
     it { should have_link('2', href: "/contests/#{slug}/players?page=2") }
     it { should have_link('3', href: "/contests/#{slug}/players?page=3") }
     it { should_not have_link('4', href: "/contests/#{slug}/players?page=4") }
-		}
   end
 
   describe 'search_error'do
@@ -397,15 +394,13 @@ describe "PlayersPages" do
     before do
       5.times { FactoryGirl.create(:player, contest: contest) }
 
-      visit players_path(contest)
+      visit contest_players_path(contest)
     end
-		pending("pending for sake of UploadPlayerUI (at some point, see what functionality on the site was represented by this test"){
     it "lists all the players for a contest in the system" do
       Player.where(contest: contest).each do |p|
         should have_selector('li', text: p.name)
         should have_link(p.name, player_path(p))
       end
     end
-		}
   end
 end
