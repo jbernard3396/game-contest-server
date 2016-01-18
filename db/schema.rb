@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160115174124) do
+ActiveRecord::Schema.define(version: 20160118022447) do
 
   create_table "contests", force: :cascade do |t|
     t.integer  "user_id"
@@ -153,6 +153,7 @@ ActiveRecord::Schema.define(version: 20160115174124) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string   "slug"
+    t.string   "round_name"
   end
 
   add_index "rounds", ["match_id"], name: "index_rounds_on_match_id"

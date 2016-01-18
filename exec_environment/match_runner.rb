@@ -108,9 +108,13 @@ class MatchRunner
             return false
         end
         #Loop through all the rounds and create a new record in the DB
+				round_num = 0
         rounds.each do |round|
+						round_num += 1
             round_obj = Round.create!(
-                match: Match.find(@match_id)
+                match: Match.find(@match_id),
+								round_name: "Round " + round_num.to_s
+
             )
             #Loop through participants and add their results to the DB
             @match_participants.each do |player|
