@@ -1,0 +1,5 @@
+<% @user_tournaments = PlayerTournament.where(player: Player.where(user: current_user.id)) %>
+
+<%= render partial: 'player_tournaments/tournament_links',
+						collection: @user_tournaments,
+						as: 'player_tournament' %> 
