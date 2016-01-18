@@ -22,7 +22,7 @@ GameContestServer::Application.routes.draw do
     resources :tournaments, shallow: true do
       resources :players
       resources :matches, only: [:index] do
-	resources :rounds, only: [:show]
+			resources :rounds, only: [:show]
       end
     end
   end
