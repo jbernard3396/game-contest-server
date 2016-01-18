@@ -1,4 +1,6 @@
+<% @player_wins = PlayerRound.where(player: player_match.player, result: "Win", round: Round.where(match: player_match.match)) %>
+
 <li>
 <%= link_to player_match.player.name, player_path(player_match.player) %>
-    (<%= player_match.result %>)
+    (<%= @player_wins.count %> Wins)
 </li>
