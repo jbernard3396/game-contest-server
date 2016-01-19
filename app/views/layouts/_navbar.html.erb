@@ -4,7 +4,7 @@
         <%= link_to 'Taylor Game Contest Server', root_path, class: 'navbar-brand' %>
     </div>
     <ul class="nav navbar-nav navbar-left">
-           <%= active_link_to 'Challenge Player', new_match_path,
+           <%= active_link_to 'Challenge Classmate', new_match_path,
 	     wrap_tag: :li, active: :exclusive %>
       
             <% if current_user and current_user.contest_creator %>

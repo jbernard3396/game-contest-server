@@ -10,13 +10,18 @@ class MatchesController < ApplicationController
 		@match.player_matches.build(player: f )
            end
    end
+
+   if params[:match] && params[:match][:user_ids]
+	   @users_selected = true
+	   @user_ids = params[:match][:user_ids]
+   end
    #@match.earliest_start = Time.now
   end 
 
 
   def create	
-    @contest = Contest.friendly.find(params[:contest_id])
-    contest = Contest.friendly.find(params[:contest_id])
+    @contest = Contest.find(params[:match][:contest_id])
+    contest = Contest.find(params[:match][:contest_id])
     round_limit = params[:match][:num_rounds]
     if params[:match][:player_ids] && params[:match][:player_ids].any? { |player_id, use| Player.find(player_id).user_id == current_user.id}
         round_limit.to_i.times do 
@@ -31,7 +36,7 @@ class MatchesController < ApplicationController
 		end
 	end
 	redirect_to @contest
-    else   	
+    else   	 
         @match = @contest.matches.build(acceptable_params)
 	flash.now[:danger] = 'You need to select at least one of your own players.'
 	render action: 'new'

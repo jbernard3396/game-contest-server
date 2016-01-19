@@ -8,7 +8,7 @@
 
 
 <div class="form-group">
-    <p><strong>My Player</strong></p>
+    <p><strong>My Player(s)</strong></p>
     <% current_user.players.each do |p| %>
         <%if ((current_user.id) == (p.user_id) && (p.contest_id) == (@contest.id))%>
                 <%= check_box_tag "match[player_ids][#{p.id}]", 1, false %>
@@ -18,12 +18,11 @@
     <% end %>
 </div>
 
-
 <!-- shows players not made by current user entered in contest-->
 <div class="form-group">
-    <p><strong>Challenge Player(s)</strong></p>
+    <p><strong>Classmate's Player(s)</strong></p>
     <% @contest.players.each do |p| %>
-         <%if current_user.id != p.user_id %>
+         <%if @user_ids.include?(p.user_id.to_s) %>
                 <%= check_box_tag "match[player_ids][#{p.id}]", 1, false %>
                 <%= label_tag "match[player_ids][#{p.id}]","#{p.name} | #{p.user.username}" %>
                 <br/>
