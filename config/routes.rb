@@ -9,7 +9,7 @@ GameContestServer::Application.routes.draw do
   get '/help/:category/(:page)', to: 'help#show'
 
   resources :users
-  
+
   resources :referees do
       member do
           get 'assets/:asset', to: 'referees#show', :constraints => { :asset => /.*/ }, as: 'assets'
