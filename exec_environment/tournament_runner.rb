@@ -81,7 +81,7 @@ class TournamentRunner
 	    players.each do |q|
 		    if p != q
 		        match_players = [p, q]
-			    create_match(match_players, @tournament.rounds_per_match, tournament_match_number)
+			    create_match(match_players, @tournament.rounds_per_match)#, tournament_match_number)
 					tournament_match_number += 1
 		    end
 	    end
@@ -91,42 +91,55 @@ class TournamentRunner
     #Runs a single elimination tournament (two players per match)
     def single_elimination(players)
         count = players.count
-        #puts " This many players: "+count.to_s
+        puts " This many players: "+count.to_s
         if count == 2
-            create_match([players[0],players[1]], @tournament.rounds_per_match)
-	        return
+            return create_match([players[0],players[1]], @tournament.rounds_per_match)
         elsif count == 3
             child = create_raw_match(1, "unassigned")
             create_player_matches(child,[players[0]])
             create_match_path("Win",child,create_match([players[1],players[2]], 1))
+						puts ' Returning child with id: '+child.id.to_s
             return child
         else
             child = create_raw_match(1, "unassigned")
             half = count/2
-            create_match_path("Win",child,single_elimination(players[0..half-1]))
-            create_match_path("Win",child,single_elimination(players[half..count]))            
+						parent1 = single_elimination(players[0..half-1])
+						puts ' parent1 id: '+parent1.id.to_s
+						parent2 = single_elimination(players[half..count])
+						puts ' parent2 id: '+parent2.id.to_s
+            create_match_path("Win",child, parent1)
+            create_match_path("Win",child, parent2)            
             return child
         end
     end
     #Creates a match and the associated player_matches
+=begin
     def create_match(match_participants, num_rounds, tournament_match_number)
         match = create_raw_match(num_rounds, "unassigned", tournament_match_number)
+=end
+    def create_match(match_participants, num_rounds)#, tournament_match_number)
+        match = create_raw_match(num_rounds, "unassigned")#, tournament_match_number)
         create_player_matches(match,match_participants)
 	    match.status = "waiting"
 	    match.save!
         return match
     end 
     #Creates a match
-    def create_raw_match(num_rounds, status = "waiting", tournament_match_number)
+    #def create_raw_match(num_rounds, status = "waiting", tournament_match_number)
+    def create_raw_match(num_rounds, status = "waiting")#, tournament_match_number)
+        #puts " num_rounds of this raw_match is: "+num_rounds.to_s
+        puts " Status of this raw_match is: "+status
+        #puts " tournament_match_number of this raw_match is: "+tournament_match_number.to_s
         match = Match.create!(
             manager: @tournament, 
             status: status,
             earliest_start: Time.now, 
             completion: Date.new,
 	   				num_rounds: num_rounds,
-						match_name: "Match " + tournament_match_number.to_s,
+						#match_name: "Match " + tournament_match_number.to_s,
+						match_name: "Match ",# + tournament_match_number.to_s,
         )
-        puts " Tournament runner created match #"+match.match_name
+        puts " Tournament runner created match #"+match.id.to_s#match_name
         return match
     end 
     #Creates player matches
