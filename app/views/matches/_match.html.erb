@@ -1,1 +1,13 @@
-<li><%= link_to "Match #{match.id}", match %></li>
+<% @winner = PlayerMatch.where(match: match, result: "Win").first %>
+<li><%= if match.manager_type.to_s == "Tournament"
+					link_to match.name , match
+				else
+					link_to match.name + " completed " + match.completion.strftime("%B %d, %Y at %H:%M"), match
+				end
+		%>
+	<%	if !(@winner).nil? %>
+		- Winner: <%= @winner.player.name	%>
+	<% else %>
+		- No Winner
+	<% end %>
+</li>

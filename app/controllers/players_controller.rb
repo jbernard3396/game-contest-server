@@ -2,6 +2,7 @@ class PlayersController < ApplicationController
   before_action :ensure_user_logged_in, except: [:index, :show]
   before_action :ensure_player_owner, only: [:edit, :update, :destroy]
 
+
   require 'will_paginate/array'
 
   def index

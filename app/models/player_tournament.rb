@@ -4,4 +4,6 @@ class PlayerTournament < ActiveRecord::Base
 
   validates :player, presence: true
   validates :tournament, presence: true
+	
+	default_scope -> { order("player_tournaments.updated_at DESC") }
 end

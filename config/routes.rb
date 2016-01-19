@@ -9,20 +9,20 @@ GameContestServer::Application.routes.draw do
   get '/help/:category/(:page)', to: 'help#show'
 
   resources :users
-  
+
   resources :referees do
       member do
-          get 'assets/:asset', to: 'referees#show', :constraints => { :asset => /.*/ }
+          get 'assets/:asset', to: 'referees#show', :constraints => { :asset => /.*/ }, as: 'assets'
       end
   end
 
   resources :contests, shallow: true do
-    resources :matches, only: [:index, :destroy]
+    resources :matches, only: [:show, :index, :destroy]
     resources :players
     resources :tournaments, shallow: true do
       resources :players
       resources :matches, only: [:index] do
-	resources :rounds, only: [:show]
+			resources :rounds, only: [:show]
       end
     end
   end

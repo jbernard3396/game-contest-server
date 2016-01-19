@@ -1,0 +1,16 @@
+<div class="col-md-5 dash-recent">
+	<h4>My Recent Challenge Match Results</h4>
+	<ol>
+		<%= render partial: 'matches/recent_challenge' %>			
+	</ol>
+	<p class="btn btn-default" type="button"><%= link_to "View Players", user_path(current_user.id) %> </p>
+</div>
+
+<div class="col-md-5 col-md-offset-2 dash-recent">
+	<h4>My Recent Tournament Results</h4>
+	<ol>
+		<%= render partial: 'matches/recent_tournaments' %>
+	</ol>
+	<p class="btn btn-default" type="button"><%= link_to "View Contests", contests_path() %> </p>
+</div>
+

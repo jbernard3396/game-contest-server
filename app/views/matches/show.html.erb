@@ -1,6 +1,6 @@
 <h1>Match Information</h1>
 
-<p>Match <%= @match.id %> for <%= link_to @match.manager.name, @match.manager %></p>
+<p> <%= @match.name %> for <%= link_to @match.manager.name, @match.manager %></p>
 <p>Status: <%= @match.status %></p>
 
 <% if @match.completed? %>
@@ -16,7 +16,13 @@
 
 <p>Referee: <%= @match.manager.referee.name %></p>
 
-<h2><%= pluralize(@match.manager.referee.players_per_game, 'Player') %></h2>
+<p>Players Per Match: <%= pluralize(@match.manager.referee.players_per_game, 'Player') %></p>
+
+<h1> <%= render partial: 'player_matches/winner',
+				object: @match,
+				as: 'match' %>
+
+</h1>
 <ol>
     <%= render partial: 'player_matches/player_links',
       collection: @match.player_matches,

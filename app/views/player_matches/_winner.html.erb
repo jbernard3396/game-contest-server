@@ -1,0 +1,10 @@
+<% @match_win = PlayerMatch.where(match: match, result: "Win").first %>
+<% if !@match_win.nil? %>
+<% @winner = Player.find(PlayerMatch.where(match: match, result: "Win").first.player_id) %>
+
+<h1> <%=@winner.name %> Wins!</h1>
+<% else %>
+
+<h1> No Winner </h1>
+
+<% end %>

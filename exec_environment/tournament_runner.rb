@@ -44,6 +44,7 @@ class TournamentRunner
     # Creates match objects for the given tournament
     # TODO Error checking that does more than output errors to the screen
     def run_tournament
+				match_num = 1
         puts " Tournament runner started creating matches for tournament #"+@tournament_id.to_s+" ("+@tournament.tournament_type+")"
         #TODO This should probably be a validation instead of an error here
         if @tournament_players.count < 2
@@ -57,7 +58,7 @@ class TournamentRunner
         # Run different tournament types
         case @tournament.tournament_type
             when "round robin"
-                round_robin(@tournament_players)
+                round_robin(@tournament_players, match_num)
             when "single elimination"
                 if @number_of_players > 2
                     puts " ERROR: Single elimination doesn't work with more than 2 players per game"
@@ -75,12 +76,13 @@ class TournamentRunner
 
     #Runs a round robin tournament with each player playing every other player twice.
     #Currently only works with 2 player games 
-    def round_robin(players)
+    def round_robin(players, tournament_match_number)
 	players.each do |p|
 	    players.each do |q|
 		    if p != q
 		        match_players = [p, q]
-			    create_match(match_players, @tournament.rounds_per_match)
+			    create_match(match_players, @tournament.rounds_per_match, tournament_match_number)
+					tournament_match_number += 1
 		    end
 	    end
 	end
@@ -107,23 +109,24 @@ class TournamentRunner
         end
     end
     #Creates a match and the associated player_matches
-    def create_match(match_participants, num_rounds)
-        match = create_raw_match(num_rounds, "unassigned")
+    def create_match(match_participants, num_rounds, tournament_match_number)
+        match = create_raw_match(num_rounds, "unassigned", tournament_match_number)
         create_player_matches(match,match_participants)
 	    match.status = "waiting"
 	    match.save!
         return match
     end 
     #Creates a match
-    def create_raw_match(num_rounds, status = "waiting")
+    def create_raw_match(num_rounds, status = "waiting", tournament_match_number)
         match = Match.create!(
             manager: @tournament, 
             status: status,
             earliest_start: Time.now, 
             completion: Date.new,
-	    num_rounds: num_rounds,
+	   				num_rounds: num_rounds,
+						match_name: "Match " + tournament_match_number.to_s,
         )
-        puts " Tournament runner created match #"+match.id.to_s
+        puts " Tournament runner created match #"+match.match_name
         return match
     end 
     #Creates player matches

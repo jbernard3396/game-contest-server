@@ -247,9 +247,29 @@ describe "MatchesPages" do
         expect { delete match_path(challenge_match) }.to change(Match, :count).by(-1)
       end
 
+			it "removes all rounds associated with the match from the system (challenge round)" do
+				expect { delete match_path(challenge_match) }.to change(Round, :count).by(-4)
+			end
+
       it "removes a match from the system (tournament match)" do
         expect { delete match_path(tournament_match) }.to change(Match, :count).by(-1)
       end
+			
+			it "removes all player matches associated with the match from the system" do
+				expect { delete match_path(tournament_match) }.to change(PlayerMatch, :count).by(-4)
+			end
+
+			it "removes all rounds associated with the match from the system (tournament round)" do
+				expect { delete match_path(tournament_match) }.to change(Round, :count).by(-4)
+			end
+
+			it "removes all player rounds associated with the match from the system" do
+				expect { delete match_path(tournament_match) }.to change(PlayerRound, :count).by(-16)
+			end
+			
+			xit "removes match path associated with the match" do
+				expect { delete match_path(tournament_match) }.to change(MatchPath, :count).by(-1)
+			end
 
     end # logged in as contest creator
 
@@ -291,7 +311,7 @@ describe "MatchesPages" do
         visit match_path(match)
       end
 
-      xit "should link to all players" do
+     xit "should link to all players" do
         match.players.each_with_index do |p, i|
           selector = "//ol/li[position()=#{i + 1}]"
           should have_selector(:xpath, selector, text: p.name)
@@ -311,7 +331,7 @@ describe "MatchesPages" do
         visit match_path(match)
       end
 
-      xit "should link to all players" do
+     xit "should link to all players" do
         match.players.each_with_index do |p, i|
           selector = "//ol/li[position()=#{match.players.size - i}]"
           should have_selector(:xpath, selector, text: p.name)
@@ -354,15 +374,15 @@ describe "MatchesPages" do
     
     it "lists all the tournament matches for a single tournament in the system" do
       Match.where(manager: tournament).each do |m|
-        should have_selector('li', text: m.id)
-        should have_link(m.id, match_path(m))
+        should have_selector('li', text: m.name)
+        should have_link(m.name, match_path(m))
       end
     end
 
 		it "should not list matches of other tournaments" do 
       Match.where(manager: t2).each do |m|
-        should_not have_selector('li', text: m.id)
-        should_not have_link(m.id, match_path(m))
+        should_not have_selector('li', text: m.name)
+        should_not have_link(m.name, match_path(m))
       end
 		end
   end
@@ -396,15 +416,15 @@ describe "MatchesPages" do
 
     it "should list all the challenge matches for a contest in which the user has a player participating" do
       challenge_matches_player1_is_in.each do |m|
-        should have_selector('li', text: m.id)
-        should have_link(m.id, match_path(m))
+        should have_selector('li', text: m.name)
+        should have_link(m.name, match_path(m))
       end
     end
 
 		it "should not list challenge matches (within the same contest) in which the user doesn\'t have a player participating" do
       challenge_matches_player1_is_not_in.each do |m|
-        should_not have_selector('li', text: m.id)
-        should_not have_link(m.id, match_path(m))
+        should_not have_selector('li', text: m.name)
+        should_not have_link(m.name, match_path(m))
       end
 
 		end

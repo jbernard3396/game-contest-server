@@ -1,0 +1,5 @@
+<% @user_matches = PlayerMatch.where(player: Player.where(user: current_user.id ), match: Match.where(manager_type: "Contest")).limit(5) %>
+
+<%= render partial: 'player_matches/match_links',
+						collection: @user_matches,
+						as: 'player_match' %>

@@ -5,7 +5,7 @@
 	<% end %>
 
     <li>
-	<%= link_to @tmp.to_sentence, match_path(player_match.match) %>
+	<%= link_to @tmp.to_sentence + " - " + player_match.player.name, match_path(player_match.match) %>
 	<% if player_match.result.nil? %>
 		(Waiting)
 	<% else %>
