@@ -26,7 +26,7 @@
 <ul>
     <li>Create <%= link_to 'New Player', new_contest_player_path(@contest) %> for this contest.</li>
     <% if current_user==@contest.user and current_user.contest_creator %>
-        <li>Create <%= link_to 'New Tournament', new_contest_tournament_path(@contest) %> for this contest.</li>
+        <li>Create <%= link_to 'New Tournament', new_tournament_path(@contest) %> for this contest.</li>
     <% end %>
     <li> <%= link_to ' Challenge other players.', new_match_path(@contest)%>  </li>
 </ul>
