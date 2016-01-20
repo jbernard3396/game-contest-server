@@ -24,9 +24,28 @@
 
 </h1>
 <ol>
-    <%= render partial: 'player_matches/player_links',
-      collection: @match.player_matches,
-      as: 'player_match' %>
+		<%@player_wins = []
+			@player_matches = []
+			@match.players.each do |p|
+				@player_wins << PlayerRound.where(player: p, result: "Win", round: Round.where(match: @match)).count
+				@player_matches << PlayerMatch.where(player: p, match: @match)
+			end
+			for w in 0..@player_wins.length-2
+				if @player_wins[w] < @player_wins[w+1]
+					tmp = @player_wins[w]
+					tmp2 = @player_matches[w]
+					@player_wins.delete_at(w)
+					@player_matches.delete_at(w)
+					@player_wins.insert(w+1, tmp)
+					@player_matches.insert(w+1,tmp2)		
+				end
+			end
+		 %>
+    <% for pm in 0..@player_matches.length-1 %>
+		<%= 	render partial: 'player_matches/player_links',
+      		collection: @player_matches[pm],
+      		as: 'player_match' %>
+		<%	end %>
 </ol>
 
 <h2><%= pluralize(@match.rounds.all.count, 'Round') %></h2>
