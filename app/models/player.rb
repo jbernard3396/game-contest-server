@@ -38,4 +38,12 @@ class Player < ActiveRecord::Base
   def move_friendly_id_error_to_name
     errors.add :name, *errors.delete(:friendly_id) if errors[:friendly_id].present?
   end
+
+	validate :contest_deadline_not_expired, on: :create
+
+	def contest_deadline_not_expired
+		if !contest.nil? && contest.deadline < DateTime.now.strftime('%Y-%m-%d %H:%M:%S')
+			errors.add(:contest, "deadline for this contest has now passed")	
+		end
+	end
 end
