@@ -8,7 +8,9 @@ GameContestServer::Application.routes.draw do
   get '/help/', to: 'help#index'
   get '/help/:category/(:page)', to: 'help#show'
 
-  resources :users
+  resources :users do
+		resources :contests, only: [:index]
+	end
 
   resources :referees do
       member do

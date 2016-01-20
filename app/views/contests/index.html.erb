@@ -8,10 +8,16 @@
   </p>
 <%end%>
 
-<h3><%= pluralize(@contests.length, 'Contest', 'Contests') %></h3>
+<h3>
+<% if @contests.nil? %>
+	0 Contests
+<%else%>
+	<%= pluralize(@contests.length, 'Contest', 'Contests') %>
+<%end%>
+</h3>
 
 <div id= "pagination">
-  <%if @contests.blank?%>
+  <%if @contests.nil? || @contests.blank?%>
     <h3><%="There are no contests available!"%></h3>
   <% else %>
      <% @contests.each do |contest| %>
@@ -21,6 +27,6 @@
           <% end %>
         </li>
     <% end %>
-  <% end %>
   <%= will_paginate %>
+  <% end %>
 </div>

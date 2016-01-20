@@ -5,10 +5,25 @@ class ContestsController < ApplicationController
 
 
   def index
-    @contests = Contest.search(params[:search]).paginate(:per_page => 10, :page => params[:page])
-    if @contests.length == 0
-      flash.now[:info] = "There were no contests that matched your search. Please try again!"
-    end
+	  @contests
+		if params[:user_id] 	
+	  	if !(current_user.players.first).nil?
+				@contest_ids = [] 
+				current_user.players.each do |p|
+					@contest_ids << p.contest_id
+				end
+				@contest_ids.each do |c|
+					@contests = Contest.where(id: @contest_ids).paginate(:per_page => 10, :page => params[:page])
+				end
+			end
+    else
+			@contests = Contest.search(params[:search]).paginate(:per_page => 10, :page => params[:page])
+		end
+			if @contests.nil? || @contests.length == 0
+      	flash.now[:info] = "There were no contests that matched your search. Please try again!"
+    	end
+		
+
   end
 
   def new

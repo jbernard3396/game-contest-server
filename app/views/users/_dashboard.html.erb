@@ -11,6 +11,6 @@
 	<ol>
 		<%= render partial: 'matches/recent_tournaments' %>
 	</ol>
-	<p class="btn btn-default" type="button"><%= link_to "View My Contests", contests_path() %> </p>
+	<p class="btn btn-default" type="button"><%= link_to "View My Contests", user_contests_path(current_user.id) %> </p>
 </div>
 
