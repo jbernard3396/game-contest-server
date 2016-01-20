@@ -2,7 +2,7 @@ require 'rails_helper'
 
 describe "PlayersPages" do
   let (:user) { FactoryGirl.create(:user) }
-  let (:contest) { FactoryGirl.create(:contest) }
+  let! (:contest) { FactoryGirl.create(:contest) }
   let (:player) { FactoryGirl.create(:player, user: user, contest: contest) }
   let (:description) { 'Test Player Description' }
   let (:name) { 'Test Player' }
@@ -11,12 +11,30 @@ describe "PlayersPages" do
 
   subject { page }
 
+	describe "new" do
+		let! (:expired_contest) { Contest.new(
+															user: FactoryGirl.create(:contest_creator),
+															referee: FactoryGirl.create(:referee),
+															deadline: DateTime.new(2000), #so the deadline has expired
+															description: "Contest Description Here",
+															name: "Expired Contest")   }
+    before do
+      login user
+			expired_contest.save(validate: false)
+      visit new_player_path
+    end
+
+		it "should not allow selecting expired contests" do
+    	should_not have_selector('option', text: expired_contest.name)
+		end
+	end
+
   describe "create" do
     let (:submit) { 'Create Player' }
 
     before do
       login user
-      visit new_contest_player_path(contest)
+      visit new_player_path
     end
 
     describe "invalid information" do
@@ -31,12 +49,40 @@ describe "PlayersPages" do
           it { should have_alert(:danger) }
         end
       end
+			describe "all contests' deadlines have expired" do
+				before do
+        	fill_in 'Name', with: name
+        	fill_in 'Description', with: description
+					select contest.name, from: 'Contest'
+        	check('Allow others to compete against this player')
+        	uncheck('Allow others to download this player')
+        	attach_file('Upload file', file_location)
+
+					# to ensure that the selected contest has an expired deadline
+					contest.deadline = DateTime.new(2000) 	
+					contest.save(validate: false)
+				end
+        it "should not create a player" do
+          expect { click_button submit }.not_to change(Player, :count)
+        end
+
+        describe "after submission" do
+          before { click_button submit }
+
+          it { should have_alert(:danger) }
+        end
+				after do
+					contest.deadline = DateTime.new(2026)
+					contest.save
+				end
+			end
     end
 
     describe "valid information" do
       before do
         fill_in 'Name', with: name
         fill_in 'Description', with: description
+				select contest.name, from: 'Contest'
         check('Allow others to compete against this player')
         uncheck('Allow others to download this player')
         attach_file('Upload file', file_location)
@@ -49,8 +95,9 @@ describe "PlayersPages" do
       describe "redirects properly", type: :request do
         before do
           login user, avoid_capybara: true
-          post contest_players_path(contest),
+          post players_path,
             player: { name: name,
+							contest_id: contest.id,
               description: description,
               downloadable: false,
               playable: true,
@@ -192,7 +239,6 @@ describe "PlayersPages" do
 
     describe "redirects properly" do
       before { delete player_path(player) }
-
       specify { expect(response).to redirect_to(contest_players_path(player.contest)) }
     end
 
@@ -231,7 +277,7 @@ describe "PlayersPages" do
     it { should have_link(player.user.username, href: user_path(player.user)) }
 
     pending { should have_link('Challenge another player',
-                               href: new_contest_player_path(contest)) }
+                               href: new_player_path) }
 
     describe "show match" do
       let!(:player_match) do
@@ -295,7 +341,6 @@ describe "PlayersPages" do
 
       visit contest_players_path(contest)
     end
-
     it { should have_content('10 Players') }
     it { should have_selector('div.pagination') }
     it { should have_link('2', href: "/contests/#{slug}/players?page=2") }
@@ -396,7 +441,6 @@ describe "PlayersPages" do
 
       visit contest_players_path(contest)
     end
-
     it "lists all the players for a contest in the system" do
       Player.where(contest: contest).each do |p|
         should have_selector('li', text: p.name)

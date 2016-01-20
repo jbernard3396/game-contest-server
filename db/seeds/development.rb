@@ -111,6 +111,15 @@ player7 = Player.create!(
   playable: false,
   file_location: Rails.root.join( "examples" , "test_player.py").to_s
 )
+player8 = Player.create!(
+  user: student,
+  contest: contest,
+  description: "test",
+  name: "Nacho",
+  downloadable: false,
+  playable: false,
+  file_location: Rails.root.join( "examples" , "test_player.py").to_s
+)
 
 tournament = Tournament.create!(
   contest: contest,
@@ -139,4 +148,5 @@ player4_tournament2 = PlayerTournament.create!(player: player4, tournament: tour
 player5_tournament2 = PlayerTournament.create!(player: player5, tournament: tournament2)
 player6_tournament2 = PlayerTournament.create!(player: player6, tournament: tournament2)
 player7_tournament2 = PlayerTournament.create!(player: player7, tournament: tournament2)
+#player8_tournament2 = PlayerTournament.create!(player: player8, tournament: tournament2)
 

@@ -14,20 +14,25 @@ class PlayersController < ApplicationController
   end
 
   def new
-    contest = Contest.friendly.find(params[:contest_id])
-    @player = contest.players.build
+    @player = Player.new
+		@contests = Contest.where('deadline > "' + DateTime.now.strftime('%Y-%m-%d %H:%M:%S') + '"')
+		if @contests.count == 0
+			flash[:danger] = 'All contest deadlines are expired'
+			redirect_to root_path
+		end
   end
 
-  def create
-    contest = Contest.friendly.find(params[:contest_id])
-    @player = contest.players.build(acceptable_create_params)
+  def create 
+    @player = Player.new(acceptable_create_params)
     @player.upload = params[:player][:upload]
     @player.user = current_user
     if @player.save
       flash[:success] = 'New Player created.'
       redirect_to @player
     else
-      render 'new'
+      #render 'new'
+			flash[:danger] = "Player could not be created"
+			redirect_to new_player_path
     end
   end
 
@@ -61,7 +66,7 @@ class PlayersController < ApplicationController
   end
 
   def acceptable_create_params
-     params.require(:player).permit(:name, :description, :downloadable, :playable)
+     params.require(:player).permit(:name, :contest_id, :description, :downloadable, :playable)
   end
 
   def ensure_player_owner
