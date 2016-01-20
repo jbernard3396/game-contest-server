@@ -5,7 +5,7 @@
     <% if @match %>
             <% if !@users_selected %>
               <%= form_tag(new_match_path, method: :get) do %>
-                <% Contest.joins(players: :user).where(id: @match.manager.id).select("Users.id", "Users.username" ).distinct.each do |n|  %> 
+                <% Contest.joins(players: :user).where(id: @match.manager.id, players: {playable: true}).select("Users.id", "Users.username" ).distinct.each do |n|  %> 
                   <%= check_box_tag "match[user_ids][#{n.id}", 1, false %>
                   <%= label_tag "match[user_ids][#{n.id}", "#{n.username}" %>
                   <br/>

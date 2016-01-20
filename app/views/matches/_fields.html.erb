@@ -22,7 +22,7 @@
 <div class="form-group">
     <p><strong>Classmate's Player(s)</strong></p>
     <% @contest.players.each do |p| %>
-         <%if @user_ids.include?(p.user_id.to_s) %>
+         <%if @user_ids.include?(p.user_id.to_s) && p.playable?%>
                 <%= check_box_tag "match[player_ids][#{p.id}]", 1, false %>
                 <%= label_tag "match[player_ids][#{p.id}]","#{p.name} | #{p.user.username}" %>
                 <br/>
