@@ -54,7 +54,7 @@ FactoryGirl.define do
   factory :contest do
     user
     referee
-    deadline Time.current + 1.day
+		deadline DateTime.new(2026)
     description "Contest Description Here"
     sequence(:name) { |i| "Contest #{i}" }
   end
@@ -62,8 +62,8 @@ FactoryGirl.define do
   factory :tournament do
     contest
     sequence(:name) { |i| "Tournament #{i}" }
+		tournament_type 'round robin'
     start Time.current
-    tournament_type "round robin"
     rounds_per_match 1
     status "waiting"
   end

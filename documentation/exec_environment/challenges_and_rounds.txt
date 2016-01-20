@@ -1,8 +1,5 @@
-I. Files
-In the exec_environment folder you have the match_runner which builds all of the matches.  The tournament_runner builds a tournament and calls to make all of the matches within it.  The check_for folders are ran to check for any match or tournament with the status of “waiting”.  
-Besides that, everything for challenges and tournaments will be in your typical MVC setup.
 
-II. Challenges and Rounds
+I. Challenges and Rounds
 
 The challenge feature is one of the main things we added this J-Term.  On the front-end for the challenge feature, a new match page will open allowing the user to select a start date and time, one of their own players, other players, and the number of matches to be ran. The only players that show up in the checkbox list in the form are those that are uploaded to the contest. Also, it is enforced in the controller that at least one of the user’s own players is selected. This is useful because the user can either challenge other players or have their own players challenge each other in order to determine the best player. It is also required in the form that the number of players selected matches the number of players specified in the referee. One of the biggest steps towards getting the challenges to actually save in the database was in differentiating them from the tournament matches. How the Game Contest Server was originally setup was that a tournament would be generated and then matches would be created from that tournament.
 
@@ -17,7 +14,7 @@ completion for tournaments and matches. When the clockwork daemon started runnin
 
 
 
-III. Future work in this area
+II. Future work in this area
 -have better ranking system for tournaments
 -have more types of tournaments
 -better search in matches page (different views for challenges and tournaments)
