@@ -16,6 +16,8 @@ GameContestServer::Application.routes.draw do
       end
   end
 
+  resources :matches, only: [:new, :create]
+
   resources :contests, shallow: true do
     resources :matches, only: [:show, :index, :destroy]
   	resources :players, only: [:index]
@@ -25,7 +27,8 @@ GameContestServer::Application.routes.draw do
       end
     end
   end
-  resources :matches, only: [:new, :create]
+	#get "match/new" => "matches#new"
+  #get 'match/new', to: 'matches#new', as: :new_match
   resources :players, except: [:index]
 
 
