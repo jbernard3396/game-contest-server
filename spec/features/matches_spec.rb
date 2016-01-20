@@ -7,7 +7,7 @@ describe "MatchesPages" do
 
   let (:user) { FactoryGirl.create(:user) }
   let (:creator) { FactoryGirl.create(:contest_creator) }
-  let (:contest) { FactoryGirl.create(:contest, user: creator) }
+  let! (:contest) { FactoryGirl.create(:contest, user: creator) }
   let! (:player1) { FactoryGirl.create(:player, contest: contest, user: creator) }
   let! (:player2) { FactoryGirl.create(:player, contest: contest) }
   let! (:player3) { FactoryGirl.create(:player, contest: contest) }
@@ -24,7 +24,11 @@ describe "MatchesPages" do
 
     before do
       login creator
-      visit new_contest_match_path(contest)
+      visit new_match_path#(contest, user)
+			select contest.name, from: :match_contest_id
+			click_button 'Choose Contest'
+			check("#{user.username}") 
+			click_button 'Pick Users'
     end
 
     describe "invalid information" do

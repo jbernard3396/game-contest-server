@@ -4,16 +4,18 @@ class TournamentsController < ApplicationController
   before_action :ensure_contest_owner, only: [:new ,:edit, :update , :destroy]
 
   def new
-    contest = Contest.friendly.find(params[:contest_id])
-    @tournament = contest.tournaments.build
-    @tournament.contest.players.each do |f|
-      @tournament.player_tournaments.build(player: f )
-    end
+    if params[:tournament] && params[:tournament][:contest_id]
+	    @contest = Contest.find(params[:tournament][:contest_id])
+	    @tournament = @contest.tournaments.build
+	    @tournament.contest.players.each do |f|
+	      @tournament.player_tournaments.build(player: f )
+      end
     @tournament.start = Time.now
+    end
   end
 
   def create
-    @contest = Contest.friendly.find(params[:contest_id])
+    @contest = Contest.find(params[:tournament][:contest_id])
     @tournament = @contest.tournaments.build(acceptable_params)
     @tournament.status = "waiting"
     if @tournament.save
