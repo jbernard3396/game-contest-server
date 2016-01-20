@@ -1,3 +1,20 @@
+<%  @player_wins = []
+	  @player_tourneys = []
+	  @tournament.players.each do |p|
+			@player_wins << PlayerMatch.where(player: p, result: "Win", match: Match.where(manager: tournament)).count
+			@player_tourneys << PlayerTournament.where(player: p, tournament: tournament)
+		end
+		for w in 0..@player_wins.length-2
+			if @player_wins[w] < @player_wins[w+1] 
+				tmp = @player_wins[w]
+				tmp2 = @player_tourneys[w]
+				@player_wins.delete_at(w)
+				@player_tourneys.delete_at(w)
+				@player_wins.insert(w+1, tmp)
+				@player_tourneys.insert(w+1, tmp2)
+			end
+		end 	 	
+%>
 <div class="table table-responsive">
 	<table class="table">
 		<thead>
@@ -9,18 +26,18 @@
 			</tr>
 		</thead>
 		<tbody>
-			<% tournament.players.each do |player|
-					 @win_count = PlayerMatch.where(player: player,
+			<% @player_tourneys.each do |pt|
+					 @win_count = PlayerMatch.where(player: pt.first.player,
 			   		 match: Match.where(manager: tournament),
 			   		 result: "Win").count 
 
- 						@loss_count = PlayerMatch.where(player: player,
+ 						@loss_count = PlayerMatch.where(player: pt.first.player,
 			   			 match: Match.where(manager: tournament),
 			    		result: "Loss").count 
 			%>
 			<tr>
 				<td>?</td><!-- e.g. '1st' (as in '1st place') -->
-				<td><%=link_to player.name, player%></td>
+				<td><%=link_to pt.first.player.name, pt.first.player%></td>
 				<td><%=@win_count%></td>
 				<td><%=@loss_count%></td>
 			</tr>
