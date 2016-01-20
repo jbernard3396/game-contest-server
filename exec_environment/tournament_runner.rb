@@ -97,7 +97,8 @@ class TournamentRunner
         elsif count == 3
             child = create_raw_match(1, "unassigned")
             create_player_matches(child,[players[0]])
-            create_match_path("Win",child,create_match([players[1],players[2]], 1))
+						parent1 = create_match([players[1],players[2]], 1)
+            create_match_path("Win",child, parent1)
 						puts ' Returning child with id: '+child.id.to_s
             return child
         else

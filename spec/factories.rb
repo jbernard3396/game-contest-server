@@ -62,8 +62,8 @@ FactoryGirl.define do
   factory :tournament do
     contest
     sequence(:name) { |i| "Tournament #{i}" }
+		tournament_type 'round robin'
     start Time.current
-    tournament_type "round robin"
     rounds_per_match 1
     status "waiting"
   end

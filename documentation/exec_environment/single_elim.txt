@@ -1,0 +1,87 @@
+This documentation explains how the system runs single elimination tournaments, and their associated matches. Single elimination only handles 2-player games (e.g. checkers).
+
+In tournament_runner.rb, see the last 2 lines for the code that calls the function 'run_tournament'. This is a function of the TournamentRunner object. The TournamentRunner class's code is within tournament_runner.rb as well.
+
+If the tournament object's tournament_type attribute is set to 'single_elimination', then the function 'run_tournament' will call the functioni 'single_elimination'. 
+
+'single_elimination' is a recursive function, and is passed an array of Player objects (these Players belong to the tournament). If tournament_runner.rb works like it should, then generating and running a tournament (see the project's master README.md file for how to do so on the game contest server). 
+
+
+Because single_elimination is recursive, all of the matches for the tournament are generated, as well as all of the MatchPaths. All of the Matches are generated first, then all of the MatchPaths.
+The Matches are generated from right to left; the championship match is generated, then the two semifinal matches, then the quarterfinal matches, and so on. 
+Then, MatchPaths are generated from left to right, so that the last two MatchPaths to be generated are the Semifinal matches to the championship match. In each of these MatchPath objects, the semifinal match is the parent_match, and the championship match is the child_match. 
+
+
+
+
+For perhaps more help than necessary, here is a walk-through of single_elimination for a 5 player tournament. This illustrates in what order Match and MatchPath objects are generated.
+~ single_elimination is called and passed player_array=[p0, p1, p2, p3, p4]
+~ single_elimination: variable 'count' is set to 5
+~ single_elimination: variable 'child' is set to a newly created Match object (we will refer to this object as m0). the function 'create_raw_match' creates a Match object, while the function 'create_match' creates a Match object and the necessary PlayerMatch objects.
+~ single_elimination: variable 'half' is set to 2
+~ single_elimination: single_elimination is called, passed the array [p0, p1]
+~ single_elimination: single_elimination: variable 'count' is set to 2
+~ single_elimination: single_elimination: call 'create_match', take the Match object that create_match returns, and return it. We will refer to this Match object as m1 (the match between p0 and p1).
+
+here is the bracket so far:
+
+           m0
+    p1-|
+	    m1
+    p0-|
+
+~ single_elimination: variable 'parent1' is set to m1 
+~ single_elimination: single_elimination is called, passed the array [p2, p3, p4]
+~ single_elimination: single_elimination: variable 'count' is set to 3
+~ single_elimination: single_elimination: variable 'child' is set to a newly created Match object (which we will refer to as m2)
+~ single_elimination: single_elimination: a PlayerMatch object is created between child (m2) and p2
+~ single_elimination: single_elimination: variable 'parent1' is set to a newly created Match object (which we will refer to as m3). A PlayerMatch object is created between parent1 (m3) and p3. Another PlayerMatch object is created between parent1 (m3) and p4. 
+~ single_elimination: single_elimination: A MatchPath object (which we will call mp0) is created between child (m2) and parent1 (m3).
+~ single_elimination: single_elimination: child (m2) is returned.
+
+here is the bracket so far:
+
+p4-|
+	m3--mp0
+p3-|   |
+       |
+      m2
+    p2-|
+
+           m0
+
+
+    p1-|
+       |
+	    m1
+       |
+    p0-|
+
+~ single_elimination: variable 'parent2' is set to m2.
+~ single_elimination: a MatchPath object (which we will call mp1) is created between child (m0) and parent1 (m1). 
+~ single_elimination: a MatchPath object (which we will call mp2) is created between child (m0) and parent2 (m2). 
+
+here is the final bracket:
+
+p4-|
+	m3--mp0
+p3-|   |
+       |
+      m2--mp2
+       |    |
+       |    |
+    p2-|    |
+            |
+           m0
+            |
+            |
+            |
+            |
+    p1-|    |   
+       |    |
+	    m1--mp1
+       |
+    p0-|
+
+
+
