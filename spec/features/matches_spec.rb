@@ -9,10 +9,10 @@ describe "MatchesPages" do
   let (:creator) { FactoryGirl.create(:contest_creator) }
   let! (:contest) { FactoryGirl.create(:contest, user: creator) }
   let! (:player1) { FactoryGirl.create(:player, contest: contest, user: creator) }
-  let! (:player2) { FactoryGirl.create(:player, contest: contest) }
-  let! (:player3) { FactoryGirl.create(:player, contest: contest) }
-  let! (:player4) { FactoryGirl.create(:player, contest: contest) }
-  let! (:player5) { FactoryGirl.create(:player, contest: contest) }
+  let! (:player2) { FactoryGirl.create(:player, contest: contest, user: user) }
+  let! (:player3) { FactoryGirl.create(:player, contest: contest, user: user) }
+  let! (:player4) { FactoryGirl.create(:player, contest: contest, user: user) }
+  let! (:player5) { FactoryGirl.create(:player, contest: contest, user: user) }
 
   let (:now) { Time.current }
   let (:submit) { 'Challenge!' }
@@ -152,10 +152,10 @@ describe "MatchesPages" do
       describe 'redirects properly', type: :request do
         before do
           login creator, avoid_capybara: true
-          post contest_matches_path(contest),
+          post matches_path(),
             match: { earliest_start: now.strftime("%F %T"),
             player_ids: {player1.id => "1", player2.id => "1", player3.id => "1", player4.id => "1"},
-	    num_rounds: 3 }
+	    num_rounds: 3, contest_id: contest.id }
         end
 
         specify { expect(response).to redirect_to(contest_path(contest)) }

@@ -99,7 +99,7 @@ class MatchesController < ApplicationController
 
     else
       flash[:danger] = "Unable to find matches"
-      redirect_to root_path
+      redirect_to contest_path(@contest) 
     end
   end
 
