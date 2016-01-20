@@ -32,6 +32,12 @@
 	     	wrap_tag: :li, active: :exclusive %>
            	<%= active_link_to 'Upload Code', new_player_path,
 	     	wrap_tag: :li, active: :exclusive %>
+           	<%= active_link_to 'All Contests', contests_path,
+	     	wrap_tag: :li, active: :exclusive %>
+             <% # not logged in %>
+             <% elsif true %>
+           	<%= active_link_to 'All Contests', contests_path,
+	     	wrap_tag: :li, active: :exclusive %>
         <% end %>
     </ul>
     <ul class="nav navbar-nav navbar-right">

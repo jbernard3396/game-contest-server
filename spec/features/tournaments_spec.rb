@@ -24,7 +24,9 @@ describe 'TournamentsPages' do
 
     before do
       login creator
-      visit new_contest_tournament_path(contest)
+      visit new_tournament_path()
+      select contest.name
+      click_button "Choose Contest"
     end
 
     describe 'invalid information' do
@@ -80,12 +82,13 @@ describe 'TournamentsPages' do
       describe 'redirects properly', type: :request do
         before do
           login creator, avoid_capybara: true
-          post contest_tournaments_path(contest),
+          post tournaments_path(),
             tournament: { name: name,
               start: now.strftime("%F %T"),
               tournament_type: tournament_type.downcase,
               players: [player1],
-	      rounds_per_match: 1
+	      rounds_per_match: 1,
+              contest_id: contest.id
           }
         end
 
