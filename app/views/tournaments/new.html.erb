@@ -12,6 +12,7 @@
     <% else %> 
     	<%= form_tag(new_tournament_path, method: :get) do  %>
         <%= select("tournament", "contest_id", Contest.all.collect {|p| [ p.name, p.id ] }, {prompt: 'Select Contest'},{onchange: 'this.form.submit()'}) %>
+            <%= submit_tag("Choose Contest") %>
 	    <% end %>
     <% end %>
 </div>
