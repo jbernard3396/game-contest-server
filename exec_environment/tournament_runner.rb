@@ -81,8 +81,7 @@ class TournamentRunner
 	    players.each do |q|
 		    if p != q
 		        match_players = [p, q]
-			    create_match(match_players, @tournament.rounds_per_match)#, tournament_match_number)
-					tournament_match_number += 1
+			    create_match(match_players, @tournament.rounds_per_match)
 		    end
 	    end
 	end
@@ -114,20 +113,15 @@ class TournamentRunner
         end
     end
     #Creates a match and the associated player_matches
-=begin
-    def create_match(match_participants, num_rounds, tournament_match_number)
-        match = create_raw_match(num_rounds, "unassigned", tournament_match_number)
-=end
-    def create_match(match_participants, num_rounds)#, tournament_match_number)
-        match = create_raw_match(num_rounds, "unassigned")#, tournament_match_number)
+    def create_match(match_participants, num_rounds)
+        match = create_raw_match(num_rounds, "unassigned")
         create_player_matches(match,match_participants)
 	    match.status = "waiting"
 	    match.save!
         return match
     end 
     #Creates a match
-    #def create_raw_match(num_rounds, status = "waiting", tournament_match_number)
-    def create_raw_match(num_rounds, status = "waiting")#, tournament_match_number)
+    def create_raw_match(num_rounds, status = "waiting")
         #puts " num_rounds of this raw_match is: "+num_rounds.to_s
         puts " Status of this raw_match is: "+status
         #puts " tournament_match_number of this raw_match is: "+tournament_match_number.to_s
@@ -137,10 +131,10 @@ class TournamentRunner
             earliest_start: Time.now, 
             completion: Date.new,
 	   				num_rounds: num_rounds,
-						#match_name: "Match " + tournament_match_number.to_s,
-						match_name: "Match ",# + tournament_match_number.to_s,
+						# determined that the line below is likely useless
+						match_name: "Match ",# + tournament_match_number.to_s, 
         )
-        puts " Tournament runner created match #"+match.id.to_s#match_name
+        puts " Tournament runner created match #"+match.id.to_s
         return match
     end 
     #Creates player matches
