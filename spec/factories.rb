@@ -90,7 +90,6 @@ FactoryGirl.define do
     completion Time.current
     earliest_start Time.current
 		num_rounds 4
-		match_name "match"
 
     factory :tournament_match do
       association :manager, factory: :tournament
