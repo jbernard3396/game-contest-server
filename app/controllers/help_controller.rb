@@ -1,5 +1,4 @@
 class HelpController < ApplicationController
-    before_action :ensure_user_logged_in
    
     #Show documentation markdown files in documentation/(category)/(filename)
     def show

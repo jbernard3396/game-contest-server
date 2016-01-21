@@ -42,7 +42,6 @@
     </ul>
     <ul class="nav navbar-nav navbar-right">
         <% if current_user %>
-            <%= active_link_to 'Help', help_path, wrap_tag: :li, active: :exclusive %>           
             <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">Account <span class="caret" /></a>
                 <ul class="dropdown-menu">
@@ -54,6 +53,7 @@
                 </ul>
             </li>
         <% else %>
+            <%= active_link_to 'Help', help_path, wrap_tag: :li, active: :exclusive %>           
             <li><%= button_to 'Log In', login_path, method: :get, class: 'btn btn-info navbar-btn' unless current_page?(login_path) %></li>
             <li><%= button_to 'Sign Up', signup_path, method: :get, class: 'btn btn-warning navbar-btn' unless current_page?(signup_path) %></li>
         <% end %>
