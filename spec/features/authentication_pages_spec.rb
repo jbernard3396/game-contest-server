@@ -13,44 +13,102 @@ describe "AuthenticationPages" do
       it { should have_alert(:danger, text: 'Invalid') }
 
       describe "visiting another page" do
-        before { click_link 'Users' }
+        before { click_link 'All Contests' }
 
         it { should_not have_alert(:danger) }
       end
     end
 
     describe "with valid account" do
-      let(:user) { FactoryGirl.create(:user) }
 
-      before do
-        fill_in 'Username', with: user.username
-        fill_in 'Password', with: user.password
-        click_button 'Log In'
-      end
+			describe "as user" do
+      	let(:user) { FactoryGirl.create(:user) }
 
-      it { should have_selector(:xpath, "//li/a", text: 'Account') }
-      it { should have_link('Profile', href: user_path(user)) }
-      it { should have_link('Settings', href: edit_user_path(user)) }
-      it { should have_link('Log Out', href: logout_path) }
-      it { should_not have_link('Log In', href: login_path) }
-      it { should_not have_button('Log In') }
-      it { should_not have_link('Sign Up', href: signup_path) }
-      it { should_not have_button('Sign Up') }
+      	before do
+        	fill_in 'Username', with: user.username
+        	fill_in 'Password', with: user.password
+        	click_button 'Log In'
+      	end
+			
+  			describe "the navigation bar" do
+    			it { should have_selector('.navbar') }
 
-      it { should have_alert(:success) }
+    			it "has the proper links" do
+      			within ".navbar" do
+        			should have_link('Taylor Game Contest Server', href: root_path)
+        			should have_link('Challenge Classmate', href: new_match_path)
+        			should have_link('Upload Code', href: new_player_path)
+        			should have_link('All Contests', href: contests_path)
+        			should_not have_link('Log In', href: login_path)
+        			should_not have_link('Sign Up', href: signup_path)
+      				should have_link('Help', href: help_path) 
+      				should have_selector(:xpath, "//li/a", text: 'Account') 
+      				should have_link('Log Out', href: logout_path) 
+      				should have_link('Profile', href: user_path(user)) 
+      				should have_link('Settings', href: edit_user_path(user)) 
+        			should_not have_selector(:xpath, "//li/a", text: 'Create a New...') 
+        			should_not have_link('Contest', href: new_contest_path) 
+        			should_not have_link('Referee') 
+        			should_not have_link('Tournament') 
+        			should_not have_link('Player') 
+        			should_not have_selector(:xpath, "//li/a", text: 'Edit Existing...') 
+        			should_not have_link('Referees') 
+        			should_not have_link('Users') 
+     				end
+   				end
+				end
 
-      describe "followed by logout" do
-        before { click_link 'Log Out' }
+      	it { should have_alert(:success) }
 
-        it { should have_button('Log In') }
-        it { should have_button('Sign Up') }
-        it { should_not have_selector(:xpath, "//li/a", text: 'Account') }
-        it { should_not have_link('Log Out', href: logout_path) }
-        it { should_not have_link('Settings') }
-        it { should_not have_link('Profile') }
+      	describe "followed by logout" do
+        	before { click_link 'Log Out' }
+  				describe "the navigation bar" do
+    				it "has the proper links" do
+      				within ".navbar" do
+        				should have_button('Log In') 
+        				should have_button('Sign Up') 
+			        	should have_link('Taylor Game Contest Server') 
+			        	should have_link('All Contests') 
+			        	should have_link('Help') 
+        				should_not have_selector(:xpath, "//li/a", text: 'Account') 
+        				should_not have_link('Log Out', href: logout_path) 
+        				should_not have_link('Settings') 
+			        	should_not have_link('Profile') 
+							end
+						end
+					end
 
-        it { should have_alert(:info) }
-      end
+        	it { should have_alert(:info) }
+      	end
+			end
+
+		
+			describe "as contest creator" do
+      	let(:creator) { FactoryGirl.create(:contest_creator) }
+
+      	before do
+        	fill_in 'Username', with: creator.username
+        	fill_in 'Password', with: creator.password
+        	click_button 'Log In'
+      	end
+  			describe "the navigation bar" do
+    			it "has the proper links" do
+      			within ".navbar" do
+			        should have_link('Taylor Game Contest Server') 
+        			should have_link('Challenge Classmate', href: new_match_path)
+        			should have_selector(:xpath, "//li/a", text: 'Create a New...') 
+        			should have_link('Contest') 
+        			should have_link('Referee') 
+        			should have_link('Tournament') 
+        			should have_link('Player') 
+        			should have_selector(:xpath, "//li/a", text: 'Edit Existing...') 
+        			should have_link('Contests') 
+        			should have_link('Referees') 
+        			should have_link('Users') 
+						end
+					end
+				end
+			end
     end
   end
 end
@@ -356,27 +414,22 @@ describe "AuthorizationPages" do
       let (:login_user) { user }
       let (:signature) { 'New Player' }
       let (:error_type) { :danger }
-			let! (:contest) { Contest.new(user: FactoryGirl.create(:contest_creator),
-																		referee: FactoryGirl.create(:referee),
-																		deadline: DateTime.new(2000), #so the deadline has expired
-																		description: "Contest Description Here",
-																		name: "Contest 1")   }
-			before { 
-				contest.save(validate: false) 
-				#puts Contest.where(name: "Contest 1").first.deadline #how to tell that the contest was saved
-			}
+
 			describe "new action, all contests have expired deadlines" do
       	it_behaves_like "redirects to root", browser_only: true do
      	  	let (:path) { new_player_path }
 				end
 			end
-=begin
+
 			describe "create action, selected contest's deadline has expired", skip_browser: true do
-       	let (:method) { :create }
-       	let (:http_path) { players_path }
+				let (:expired_contest) { FactoryGirl.create(:expired_contest) }
+      	it_behaves_like "redirects to root", skip_browser: true do
+       		let (:http_path) { players_path }
+       		let (:method) { :post }
+          let (:params) { ... }
+				end
 				# test not finished
 			end
-=end
 		end
 	end
 

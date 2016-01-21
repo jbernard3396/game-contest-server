@@ -57,6 +57,10 @@ FactoryGirl.define do
 		deadline DateTime.new(2026)
     description "Contest Description Here"
     sequence(:name) { |i| "Contest #{i}" }
+		factory :expired_contest do
+    	to_create {|instance| instance.save(validate: false) }
+			deadline DateTime.new(2010)
+		end
   end
 
   factory :tournament do

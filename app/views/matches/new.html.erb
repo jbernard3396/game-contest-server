@@ -24,7 +24,7 @@
             <% end %>
           <% end %>
     <% else %>
-	<h4> Pick a Contest to have a challenge in</h4>
+	<h4>Select the contest that hosts the match</h4>
           <%= form_tag(new_match_path, method: :get) do  %>
           <%= select("match", "contest_id", Contest.all.collect {|p| [ p.name, p.id ] }, {},{onchange: 'this.form.submit()'}) %>
           <%= submit_tag("Choose Contest") %>

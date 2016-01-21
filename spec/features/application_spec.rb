@@ -1,34 +1,16 @@
 require 'rails_helper'
 
 feature "HomePage" do
-  before { visit root_path }
-
   subject { page }
 
-	describe "not logged in" do
-  	describe "the navigation bar" do
-    	it { should have_selector('.navbar') }
+  let(:user) { FactoryGirl.create(:user) }
+  let!(:challenge_match) { FactoryGirl.create(:challenge_match) }
+  let!(:tournament_match) { FactoryGirl.create(:tournament_match) }
 
-    	it "has the proper links" do
-      	within ".navbar" do
-        	should have_link('Game Contest Server', href: root_path)
-        	should have_link('Users', href: users_path)
-        	should have_link('Contests', href: contests_path)
-        	should have_link('Referees', href: referees_path)
-        	should have_button('Log In')
-        	should have_button('Sign Up')
-     		end
-   		end
-  	end
+  before do 
+    login user
+		visit root_path 
 	end
 
-	describe "logged in" do
-  	describe "the navigation bar" do
-    	it "has the proper links" do
-      	within ".navbar" do
-        	should have_link('Challenge Classmate', href: new_match_path)
-				end
-			end
-		end
-	end
+
 end
