@@ -90,7 +90,7 @@ Both the 2015 and the 2016 Jterm teams recommend strongly that you stick with te
 The 2016 Jterm team has left some tests as pending and incompletely filled out. These pending tests are a suggestion to the next team that these tests should be fully written and made official tests.
 
 ###Tracking Issues with GitHub
-The 2016 Jterm team recommends using GitHub's [Issues](https://github.com/PastyPurpleTrolls/game-contest-server/issues) tracker. There, we have listed issues are not described in pending tests.
+The 2016 Jterm team recommends using GitHub's [Issues](https://github.com/PastyPurpleTrolls/game-contest-server/issues) tracker. There, we have listed issues that are not described in pending tests.
 
 ##Referees
 

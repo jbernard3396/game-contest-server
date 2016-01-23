@@ -27,6 +27,8 @@ describe "PlayersPages" do
 		it "should not allow selecting expired contests" do
     	should_not have_selector('option', text: expired_contest.name)
 		end
+
+		# see spec/features/authentication_pages_spec.rb for tests defining when a user is or is not allowed to use the new_player_path
 	end
 
   describe "create" do

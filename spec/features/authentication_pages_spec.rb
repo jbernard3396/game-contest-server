@@ -50,10 +50,10 @@ describe "AuthenticationPages" do
         			should_not have_link('Contest', href: new_contest_path) 
         			should_not have_link('Referee') 
         			should_not have_link('Tournament') 
-        			should_not have_link('Player') 
         			should_not have_selector(:xpath, "//li/a", text: 'Edit Existing...') 
         			should_not have_link('Referees') 
-        			should_not have_link('Users') 
+        			should_not have_link('Users', href: users_path) 
+							# 'should_not have_link('Contests')' is not a good test, as Students are allowed to go to the contests_path in their navbar
      				end
    				end
 				end
@@ -104,10 +104,32 @@ describe "AuthenticationPages" do
         			should have_selector(:xpath, "//li/a", text: 'Edit Existing...') 
         			should have_link('Contests') 
         			should have_link('Referees') 
-        			should have_link('Users') 
+        			should_not have_link('Users', href: users_path)
 						end
 					end
 				end
+
+        after { click_link 'Log Out' }
+			end
+
+			pending "Please make the test correctly fail here first, then correctly pass" do
+			describe "as admin" do
+      	let(:admin) { FactoryGirl.create(:admin) }
+      	before do
+        	fill_in 'Username', with: admin.username
+        	fill_in 'Password', with: admin.password
+        	click_button 'Log In'
+      	end
+
+  			describe "the navigation bar" do
+    			it "has the proper links" do
+      			within ".navbar" do
+        			should have_selector(:xpath, "//li/a", text: 'Edit Existing...') 
+        			should have_link('Users', href: users_path) 
+						end
+					end
+				end
+			end
 			end
     end
   end
@@ -235,7 +257,7 @@ describe "AuthorizationPages" do
 			end
 		end
 
-		describe "for Rounds controller show action" do # written with an educated guess of what the path will be for rounds (but that route has not been generated yet)
+		describe "for Rounds controller show action" do 
 			describe "(Rounds are of a challange match)" do 
         it_behaves_like "redirects to a login" , browser_only: true do
 					let (:challenge_round) { FactoryGirl.create(:challenge_round) }

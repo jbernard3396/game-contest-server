@@ -42,14 +42,13 @@ describe "MatchesPages" do
 			it { should_not have_selector('option', text: expired_contest.name ) }
 		end
 
-		describe "in case of existing contest but no players in that contest" do
+		pending { describe "in case of existing contest but no players in that contest" do
     	before do
       	login user 
       	visit new_match_path
 				#puts page.body
 			end
-			
-		end
+		end }
 	end
 	
 	# the following objects must come after the tests for "new"
