@@ -32,6 +32,7 @@ end
 
 shared_examples "redirects to root" do |options|
   options ||= {}
+  params ||= {}
 
   describe "requesting", type: :request do
     before { login login_user, avoid_capybara: true }
@@ -47,7 +48,7 @@ shared_examples "redirects to root" do |options|
 
   	unless options[:browser_only]
     	describe "visit HTTP path" do
-      	before { send(method, http_path) }
+      	before { send(method, http_path, params) }
 
       	it { errors_on_redirect(root_path, error_type) }
     	end

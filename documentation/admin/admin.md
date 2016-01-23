@@ -4,7 +4,7 @@ The Game Contest Website is an interactive, web based manager for automated turn
 
 ##Terminology
 
-* See terminology in [User Documentation](/help/user)
+* See terminology in [Student Documentation](/help/student)
 
 ##Admin Capabilities
 
