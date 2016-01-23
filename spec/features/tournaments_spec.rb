@@ -18,6 +18,35 @@ describe 'TournamentsPages' do
   let (:edit_tournament_type) { 'Single Elimination' }
 
   subject { page }
+# NEW TOURNAMENTS WITH NO CONTESTS
+	describe "new" do
+    before do
+      login creator 
+      visit new_tournament_path
+    end
+
+    describe "in case of no existing contests" do
+      before do
+        Contest.destroy_all
+        visit new_tournament_path
+      end
+      it "gives helpful description to creator that making tournaments is not currently possible" do
+        should have_selector('p', text: /not possible/)
+      end
+      it "hides the 'Choose Contest' button" do
+        should_not have_button('Choose Contest')
+      end
+    end
+
+    describe "no contests whose deadlines have passed should be select-able" do
+      let! (:expired_contest) { FactoryGirl.create(:expired_contest, user: creator) }
+      before do
+        visit new_tournament_path
+      end
+
+      it { should_not have_selector('option', text: expired_contest.name ) }
+    end
+	end
 
   describe 'create' do
     let(:submit) {'Create Tournament'}

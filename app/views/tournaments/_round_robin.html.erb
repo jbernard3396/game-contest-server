@@ -1,16 +1,21 @@
-<%  @player_wins = []
+<% 	@player_win_pct = []
 	  @player_tourneys = []
 	  @tournament.players.each do |p|
-			@player_wins << PlayerMatch.where(player: p, result: "Win", match: Match.where(manager: tournament)).count
+			player_wins = PlayerMatch.where(player: p, result: "Win", match: Match.where(manager: tournament)).count
+			player_losses = PlayerMatch.where(player: p, result: "Loss", match: Match.where(manager: tournament)).count
+			if player_losses <= 0
+				player_losses = 1
+			end
+			@player_win_pct << player_wins.to_f/(player_wins+player_losses)
 			@player_tourneys << PlayerTournament.where(player: p, tournament: tournament)
 		end
-		for w in 0..@player_wins.length-2
-			if @player_wins[w] < @player_wins[w+1] 
-				tmp = @player_wins[w]
+		for w in 0..@player_win_pct.length-2
+			if @player_win_pct[w] < @player_win_pct[w+1] 
+				tmp = @player_win_pct[w]
 				tmp2 = @player_tourneys[w]
-				@player_wins.delete_at(w)
+				@player_win_pct.delete_at(w)
 				@player_tourneys.delete_at(w)
-				@player_wins.insert(w+1, tmp)
+				@player_win_pct.insert(w+1, tmp)
 				@player_tourneys.insert(w+1, tmp2)
 			end
 		end 	 	
@@ -23,9 +28,11 @@
 				<th>Player</th>
 				<th>Wins</th>
 				<th>Losses</th>
+				<th>Win %</th>
 			</tr>
 		</thead>
 		<tbody>
+			<% i = 0 %>
 			<% @player_tourneys.each do |pt|
 					 @win_count = PlayerMatch.where(player: pt.first.player,
 			   		 match: Match.where(manager: tournament),
@@ -40,7 +47,9 @@
 				<td><%=link_to pt.first.player.name, pt.first.player%></td>
 				<td><%=@win_count%></td>
 				<td><%=@loss_count%></td>
+				<td><%=@player_win_pct[i]%></td>
 			</tr>
+			<% i += 1 %>
 			<% end %>
 		</tbody>
 	</table>
