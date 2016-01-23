@@ -25,10 +25,14 @@
           <% end %>
     <% else %>
 	<h4>Select the contest that hosts the match</h4>
-          <%= form_tag(new_match_path, method: :get) do  %>
-          <%= select("match", "contest_id", Contest.all.collect {|p| [ p.name, p.id ] }, {},{onchange: 'this.form.submit()'}) %>
-          <%= submit_tag("Choose Contest") %>
-          <% end %>
+					<% if Contest.where("deadline > ?", Time.now).count > 0 %>
+          	<%= form_tag(new_match_path, method: :get) do  %>
+         	 	<%= select("match", "contest_id", Contest.where("deadline > ?", Time.now).collect {|p| [ p.name, p.id ] }, {},{onchange: 'this.form.submit()'}) %>
+            <%= submit_tag("Choose Contest") %>
+            <% end %>
+					<% else %>
+						<p>No contests, not possible to challenge classmate</p>
+					<% end %>
     <% end %>
 
 </div>

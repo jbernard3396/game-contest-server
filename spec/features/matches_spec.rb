@@ -20,6 +20,10 @@ describe "MatchesPages" do
 		end
 
 		describe "in case of no existing contests" do
+			before do
+				Contest.destroy_all
+				visit new_match_path
+			end
 			it "gives helpful description to user that making challenges is not currently possible" do
 				should have_selector('p', text: /not possible/) 
 			end
