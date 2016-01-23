@@ -12,4 +12,8 @@ feature "HomePage" do
 	end
   subject { page }
 =end
+
+	describe "in the dashboard, test that the appropriate matches are shown, and that other matches are not shown" do
+		it "is a pending number of tests"
+	end
 end

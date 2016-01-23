@@ -42,13 +42,14 @@ describe "MatchesPages" do
 			it { should_not have_selector('option', text: expired_contest.name ) }
 		end
 
-		pending { describe "in case of existing contest but no players in that contest" do
-    	before do
-      	login user 
-      	visit new_match_path
-				#puts page.body
+		describe "in case of existing contest but no players in that contest" do
+			xit "gives helpful description to user that making challenges in this contest is not currently possible" do
+				should have_selector('p', text: /not possible/) 
 			end
-		end }
+			xit "hides the 'Pick Users' button" do
+       	should_not have_button('Choose Contest') 
+			end
+		end 
 	end
 	
 	# the following objects must come after the tests for "new"

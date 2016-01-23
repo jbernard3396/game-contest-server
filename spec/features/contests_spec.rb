@@ -11,6 +11,17 @@ describe "ContestsPages" do
 
   subject { page }
 
+	describe "new" do
+		describe "in case of no existing referees" do
+			xit "gives helpful description to creator that making contests is not currently possible" do
+				should have_selector('p', text: /not possible/) 
+			end
+			xit "hides the 'Create Contest' button" do
+       	should_not have_button('Choose Contest') 
+			end
+		end
+	end
+
   describe "create" do
     let (:submit) { 'Create Contest' }
 

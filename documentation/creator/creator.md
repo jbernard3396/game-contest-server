@@ -37,8 +37,6 @@ A contest creator is capable of
 		* ‘Start’- the system will begin the tournament at this time.
 		* ‘Tournament type’
 			* The two current choices are Round Robin and Single Elimination. The system can run both tournaments. 
-			* The Round Robin’s results are displayed in a tabular format, and the end placement of the tournament (who came in first, second, etcetera) is clear. 
-			* The Single Elimination’s results are not displayed in a polished format. They are currently displayed in the same format as Round Robin. (is the Round Robin placement correct?)
 		* ‘Number of rounds per match’
 			* The upper bound of this number is already set by the referee of the contest.
 * View or edit a Contest

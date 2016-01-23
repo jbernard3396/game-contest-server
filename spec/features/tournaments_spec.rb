@@ -38,6 +38,15 @@ describe 'TournamentsPages' do
       end
     end
 
+		describe "in case of no players in the contest" do
+      xit "gives helpful description to creator that making tournaments is not currently possible" do
+        should have_selector('p', text: /not possible/)
+      end
+      xit "hides the 'Choose Contest' button" do
+        should_not have_button('Choose Contest')
+      end
+		end
+
     describe "no contests whose deadlines have passed should be select-able" do
       let! (:expired_contest) { FactoryGirl.create(:expired_contest, user: creator) }
       before do
@@ -286,6 +295,7 @@ describe 'TournamentsPages' do
   end # destroy
 
   describe 'show' do
+
     let!(:tournament) { FactoryGirl.create(:tournament) }
 
     before { visit tournament_path(tournament) }
@@ -320,7 +330,21 @@ describe 'TournamentsPages' do
       end
     end
 
+		describe "round robin" do
+			describe "gives correct placement of players" do
+				it "is a pending test"
+			end
+			describe "calculates win percentage correctly" do
+				it "is a pending test"
+			end
+			describe "gives correct number of wins and losses per player" do
+				it "is a pending test"
+			end
+		end
 
+		describe "single elimination" do
+			it "will need tests"
+		end
   end # show
 
   describe "show all" do
