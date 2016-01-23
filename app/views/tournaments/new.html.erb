@@ -3,17 +3,21 @@
 
     <% if @tournament %>
 	    <%= form_for @tournament do |f| %>
-		<%= render 'shared/error_messages', object: @tournament %>
-		<%= render "fields", f:f %>
+				<%= render 'shared/error_messages', object: @tournament %>
+				<%= render "fields", f:f %>
                 <%= hidden_field_tag("tournament[contest_id]", @tournament.contest.id) %>
 
-		<%= f.submit "Create Tournament", class: 'btn btn-primary' %>
+				<%= f.submit "Create Tournament", class: 'btn btn-primary' %>
 	    <% end %>
-    <% else %> 
-    	<%= form_tag(new_tournament_path, method: :get) do  %>
-        <%= select("tournament", "contest_id", Contest.all.collect {|p| [ p.name, p.id ] }, {},{onchange: 'this.form.submit()'}) %>
-            <%= submit_tag("Choose Contest") %>
-	    <% end %>
+    <% else %>
+			<% if Contest.where("deadline > ?", Time.now).count > 0 %>
+    		<%= form_tag(new_tournament_path, method: :get) do  %>
+        	<%= select("tournament", "contest_id", Contest.where("deadline > ?", Time.now).collect {|p| [ p.name, p.id ] }, {},{onchange: 'this.form.submit()'}) %>
+        	<%= submit_tag("Choose Contest") %>
+				<% end %>
+			<% else %>
+			  <p>No contests, not possible to create tournament</p>
+			<% end %>
     <% end %>
 </div>
 
