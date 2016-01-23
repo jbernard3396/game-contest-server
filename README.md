@@ -84,6 +84,14 @@ However, make sure that you understand the ramifications of this command- the da
 
 Frontend user interface files are located in `app/assets`. Views are in `app/views`
 
+###Test-Driven Development
+Both the 2015 and the 2016 Jterm teams recommend strongly that you stick with test-driven development. The long-term benefits outweigh the short-term struggles. 
+####Pending tests
+The 2016 Jterm team has left some tests as pending and incompletely filled out. These pending tests are a suggestion to the next team that these tests should be fully written and made official tests.
+
+###Tracking Issues with GitHub
+The 2016 Jterm team recommends using GitHub's [Issues](https://github.com/PastyPurpleTrolls/game-contest-server/issues) tracker. There, we have listed issues are not described in pending tests.
+
 ##Referees
 
 Referees are executable files that are uploaded by instructors to enforce the rules in a competition match. The Game Contest Server does not have any concept of what a "game" is, rather the referee is in charge of defining what that means (chess, checkers, risk, etc...) 
