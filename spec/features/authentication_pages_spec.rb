@@ -426,7 +426,7 @@ describe "AuthorizationPages" do
       	it_behaves_like "redirects to root", skip_browser: true do
        		let (:http_path) { players_path }
        		let (:method) { :post }
-          let (:params) { ... }
+   #       let (:params) { ... }
 				end
 				# test not finished
 			end
