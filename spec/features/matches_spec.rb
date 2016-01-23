@@ -345,46 +345,8 @@ describe "MatchesPages" do
       it { should have_content(distance_of_time_in_words_to_now(match.completion)) }
     end
 
-    describe "associated players (descending scores)" do
-      let!(:players) { [] }
-
-      before do
-        match.player_matches.each_with_index do |pm, i|
-         # pm.score = 10 - i
-          pm.save
-        end
-
-        visit match_path(match)
-      end
-
-     xit "should link to all players" do
-        match.players.each_with_index do |p, i|
-          selector = "//ol/li[position()=#{i + 1}]"
-          should have_selector(:xpath, selector, text: p.name)
-          should have_link(p.name, player_path(p))
-          should have_selector(:xpath, selector, text: (10 - i).to_s)
-        end
-      end
-    end
-
-    describe "associated players (ascending scores)" do
-      before do
-        match.player_matches.each_with_index do |pm, i|
-         # pm.score = 10 + i
-          pm.save
-        end
-
-        visit match_path(match)
-      end
-
-     xit "should link to all players" do
-        match.players.each_with_index do |p, i|
-          selector = "//ol/li[position()=#{match.players.size - i}]"
-          should have_selector(:xpath, selector, text: p.name)
-          should have_link(p.name, player_path(p))
-          should have_selector(:xpath, selector, text: (10 + i).to_s)
-        end
-      end
+    describe "associated players (descending wins)" do
+			it "Make a test to see if players are ordered correctly by wins"
     end
   end
 

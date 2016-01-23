@@ -1,3 +1,8 @@
+<%@ref_rules = @referee.rules_url
+	unless @ref_rules[/\Ahttp:\/\//] || @ref_rules[/\Ahttps:\/\//]
+		@ref_rules = "http://#{@ref_rules}"
+	end
+%>
 <h1>Referee Information</h1>
 
 <% if current_user == @referee.user and current_user.contest_creator %>
@@ -7,7 +12,7 @@
 
 <p>Name: <%= @referee.name %></p>
 
-<p><%= link_to 'Rules', @referee.rules_url %></p>
+<p><%= link_to 'Rules', @ref_rules %></p>
 
 <p>Round limit: <%= @referee.round_limit %></p>
 
