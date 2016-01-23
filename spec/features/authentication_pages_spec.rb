@@ -421,15 +421,15 @@ describe "AuthorizationPages" do
 				end
 			end
 
-			describe "create action, selected contest's deadline has expired", skip_browser: true do
+			pending{ describe "create action, selected contest's deadline has expired", skip_browser: true do
 				let (:expired_contest) { FactoryGirl.create(:expired_contest) }
       	it_behaves_like "redirects to root", skip_browser: true do
        		let (:http_path) { players_path }
        		let (:method) { :post }
-   #       let (:params) { ... }
+          #let (:params) { ... }
 				end
 				# test not finished
-			end
+			end }
 		end
 	end
 
