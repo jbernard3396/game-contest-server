@@ -50,6 +50,7 @@ class MatchRunner
 	   end
        end
        @max_match_time = @referee.time_per_game
+       @max_match_turn = @referee.turn_per_game
        @tournament = @match.manager
        @num_rounds = @match.num_rounds
 
@@ -64,7 +65,7 @@ class MatchRunner
             return
         end
         #Call round wrapper which runs the executables and generates game hashes
-        round_wrapper = RoundWrapper.new(@referee,@match_id,@number_of_players,@max_match_time,@match_participants,@num_rounds,@duplicate_players)
+        round_wrapper = RoundWrapper.new(@referee,@match_id,@number_of_players,@max_match_time,@max_match_turn,@match_participants,@num_rounds,@duplicate_players)
         puts "   Match runner running match #"+@match_id.to_s
         round_wrapper.run_match
 	
