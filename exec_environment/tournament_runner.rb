@@ -38,6 +38,7 @@ class TournamentRunner
         @tournament_players = @tournament.players
         @number_of_players = @referee.players_per_game
         @max_match_time = @referee.time_per_game
+        @max_match_turn = @referee.turn_per_game
     end
 
 

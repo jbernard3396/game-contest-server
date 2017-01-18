@@ -141,6 +141,7 @@ ActiveRecord::Schema.define(version: 20170105214505) do
     t.string   "compressed_file_location"
     t.integer  "round_limit"
     t.integer  "time_per_game"
+    t.integer  "turn_per_game"    
     t.boolean  "rounds_capable"
     t.string   "replay_assets_location",   limit: 255
   end

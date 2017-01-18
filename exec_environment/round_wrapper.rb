@@ -14,7 +14,7 @@ class RoundWrapper
     attr_accessor :status, :rounds, :match
 
     #Constructor, sets socket for communication to referee and starts referee and players
-    def initialize(referee, match_id, number_of_players, max_match_time, players, rounds)  
+    def initialize(referee, match_id, number_of_players, max_match_time, max_match_turn, players, rounds)  
         #Sets port for referee to talk to wrapper_server  
         @wrapper_server = TCPServer.new(0)
         
@@ -24,6 +24,7 @@ class RoundWrapper
         @child_list = []
         @number_of_players = number_of_players
         @max_match_time = max_match_time
+        @max_match_turn = max_match_turn
         @num_rounds = rounds
  
         @status = {}
@@ -102,9 +103,9 @@ class RoundWrapper
         #Start referee process, giving it the port to talk to us on
         wrapper_server_port = @wrapper_server.addr[1]
 	    if Dir.glob("#{File.dirname(@referee.file_location)}/[Mm]akefile").size > 0
-		    command="cd #{Shellwords.escape File.dirname(@referee.file_location)}; make run port=#{wrapper_server_port} num_players=#{@number_of_players} num_rounds=#{@num_rounds} max_time=#{@max_match_time}"
+		    command="cd #{Shellwords.escape File.dirname(@referee.file_location)}; make run port=#{wrapper_server_port} num_players=#{@number_of_players} num_rounds=#{@num_rounds} max_time=#{@max_match_time} max_turn=#{@max_match_turn}"
 	    else
-		    command="#{Shellwords.escape @referee.file_location} -p #{wrapper_server_port} -n  #{@number_of_players} -r #{@num_rounds} -t #{@max_match_time}"
+		    command="#{Shellwords.escape @referee.file_location} -p #{wrapper_server_port} -n  #{@number_of_players} -r #{@num_rounds} -t #{@max_match_time} -m #{@max_match_turn}"
 	    end
 
 	loc = "#{Shellwords.escape @referee.file_location[0, @referee.file_location.length-@referee.name.length]}logs/match_#{@match_id}_round_#{@rounds.length + 1}" 

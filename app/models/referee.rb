@@ -12,6 +12,7 @@ class Referee < ActiveRecord::Base
 #    validate :valid_url
     validates :players_per_game,  numericality: { only_integer: true, greater_than: 0, less_than: 11 }
     validates :time_per_game,     numericality: { only_integer: true, greater_than: 0, less_than: 16 }
+    validates :turn_per_game,     numericality: { only_integer: true, greater_than: 0 }
     validates :file_location,              presence: true
   	validates :rounds_capable,	inclusion: { in: [true, false] }	
     #  validates :programming_language, presence: true

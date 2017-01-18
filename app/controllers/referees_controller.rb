@@ -71,6 +71,7 @@ class RefereesController < ApplicationController
                                         :rounds_capable,
                                         :players_per_game,
                                         :time_per_game,
+                                        :turn_per_game,
                                         :upload,
                                         :upload2,
                                         :upload3)
